@@ -1,0 +1,6 @@
+#!/bin/bash
+
+rm -f `dirname $0`/../pkg/topcgen*.gem
+gem build `dirname $0`/../topcgen.gemspec
+mv topcgen*.gem `dirname $0`/../pkg/
+sudo gem install --local `dirname $0`/../pkg/topcgen*.gem

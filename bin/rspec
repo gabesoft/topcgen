@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ruby -rrubygems -S /usr/local/lib/ruby/gems/1.9.1/gems/rspec-core-2.6.3/bin/rspec `dirname $0`/../spec/*_spec.rb

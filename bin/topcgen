@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'topcgen'
+
+Topcgen.run
