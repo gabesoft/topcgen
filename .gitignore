@@ -1,6 +1,7 @@
 *.gem
 .bundle
 Gemfile.lock
+NERD_tree_*
 pkg/*
 tmp/*
 cookies/*
