@@ -2,7 +2,7 @@ require 'fakeweb'
 
 FakeWeb.allow_net_connect = true # allow unregistered connections
 
-module Prodext
+module Topcgen
   SPEC_DOMAIN = 'http://www.myapp.com/'
   AUTH_DOMAIN = 'https://www.myapp.com/'
 
