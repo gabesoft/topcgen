@@ -5,10 +5,10 @@ require 'yaml'
 module Topcgen
   describe Settings do
     it "should read settings from file" do
-      credentials = { 'user' => 'auser', 'pass' => 'apass' }
+      credentials = { :user => 'auser', :pass => 'apass' }
       settings = Settings.read_file 'spec/files/settings.yml'
-      settings['credentials'].should eq credentials
-      settings['namespace_root'].should eq 'aroot'
+      settings[:credentials].should eq credentials
+      settings[:namespace_root].should eq 'aroot'
     end
 
     it "should return an empty dictionary on non-existent file" do

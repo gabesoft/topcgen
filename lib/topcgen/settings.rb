@@ -13,7 +13,16 @@ module Topcgen
 
     def self.read(stream)
       stream.rewind
-      YAML::load stream.read
+      clean(YAML::load stream.read)
+    end
+
+    private
+
+    def self.clean(hash) 
+      hash.inject({}) do |memo,(k,v)|
+        memo[k.to_sym] = v.instance_of?(Hash) ? (clean v) : v
+        memo 
+      end
     end
   end
 end

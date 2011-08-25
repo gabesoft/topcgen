@@ -2,6 +2,7 @@
 .bundle
 Gemfile.lock
 NERD_tree_*
+settings.yml
 pkg/*
 tmp/*
 cookies/*

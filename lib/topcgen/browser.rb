@@ -3,15 +3,15 @@ module Topcgen
   class Browser
 
     def login(credentials)
-      if !credentials || !credentials['user']
+      if credentials.nil? || credentials[:user].nil?
         raise 'no user specified'
       end
-      if !credentials || !credentials['pass']
+      if credentials.nil? || credentials[:pass].nil?
         raise 'no password specified'
       end
 
-      puts "user: #{credentials['user']}"
-      puts "pass: #{credentials['pass']}"
+      puts "user: #{credentials[:user]}"
+      puts "pass: #{credentials[:pass]}"
     end
 
     def search(class_name)

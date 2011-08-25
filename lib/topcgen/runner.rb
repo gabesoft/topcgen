@@ -9,8 +9,9 @@ module Topcgen
   def self.run
     options = parse_options
     settings = Settings.read_file 'settings.yml'
-    settings['credentials'] = { 'user' => options[:user] } unless !options[:user]
-    settings['credentials'] = { 'pass' => options[:pass] } unless !options[:pass]
+    settings[:credentials] = {} if settings[:credentials].nil?
+    settings[:credentials][:user] = options[:user] unless options[:user].nil?
+    settings[:credentials][:pass] = options[:pass] unless options[:pass].nil?
     browser = Browser.new
 
     browser.login settings[:credentials]
