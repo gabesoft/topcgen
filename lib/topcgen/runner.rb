@@ -8,7 +8,7 @@ require 'json'
 module Topcgen
   def self.run
     options = parse_options
-    settings = Settings.read 'settings.yml'
+    settings = Settings.read_file 'settings.yml'
     settings['credentials'] = { 'user' => options[:user] } unless !options[:user]
     settings['credentials'] = { 'pass' => options[:pass] } unless !options[:pass]
     browser = Browser.new
@@ -24,19 +24,21 @@ module Topcgen
     #       generate unit tests
   end
 
+  private
+
   def self.parse_options
     options = {}
 
     parser = OptionParser.new do |opts|
-      opts.on '-c', '--class CLASS_NAME', 'The problem class name' do |name|
+      opts.on '-c', '--class CLASS_NAME', 'the problem class name' do |name|
         options[:class] = name
       end
 
-      opts.on '-u', '--user [USER_NAME]', 'The topcoder user name' do |user|
+      opts.on '-u', '--user [USER_NAME]', 'the topcoder user name' do |user|
         options[:user] = user
       end
 
-      opts.on '-p', '--pass [PASSWORD]', 'The topcoder password' do |pass|
+      opts.on '-p', '--pass [PASSWORD]', 'the topcoder password' do |pass|
         options[:pass] = pass
       end
 
@@ -54,12 +56,17 @@ module Topcgen
     begin
       parser.parse!
 
+      raise OptionParser::MissingArgument.new '--class' if options[:class].nil?
+
       puts 'options detected'
       puts '----------------'
       pp options
       puts '----------------'
 
       options
+    rescue OptionParser::MissingArgument => err
+      puts err
+      exit
     rescue OptionParser::InvalidOption
       puts parser
       exit

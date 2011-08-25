@@ -2,7 +2,7 @@
 module Topcgen
   class Settings
     def self.read_file(file)
-      if !!file
+      if !!file && (File.exists? file)
         File.open(file, 'r') do |stream|
           read stream
         end

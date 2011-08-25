@@ -10,5 +10,10 @@ module Topcgen
       settings['credentials'].should eq credentials
       settings['namespace_root'].should eq 'aroot'
     end
+
+    it "should return an empty dictionary on non-existent file" do
+      settings = Settings.read_file 'nonexistent.yml'
+      settings.should eq ({})
+    end
   end
 end

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email         = %w{gabesoft@gmail.com}
 
   s.platform      = Gem::Platform::RUBY
-  s.version       = Prodext::VERSION
+  s.version       = Topcgen::VERSION
 
   s.homepage      = "http://github.com/gabesoft/topcgen"
   s.summary       = "Top Coder Problems Code Generator"
