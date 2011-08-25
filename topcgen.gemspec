@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.version       = Prodext::VERSION
 
   s.homepage      = "http://github.com/gabesoft/topcgen"
-  s.summary       = "Top Coder Problem Code Generator"
+  s.summary       = "Top Coder Problems Code Generator"
   s.description   = ""
 
   s.rubyforge_project = "topcgen"

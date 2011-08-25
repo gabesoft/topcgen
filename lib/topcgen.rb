@@ -1,2 +1,4 @@
 require 'rubygems'
-require 'prodext/core'
+require 'topcgen/runner'
+require 'topcgen/settings'
+require 'topcgen/browser'
