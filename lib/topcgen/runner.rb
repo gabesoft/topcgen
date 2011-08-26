@@ -8,21 +8,25 @@ require 'json'
 module Topcgen
   def self.run
     options = parse_options
-    settings = Settings.read_file 'settings.yml'
+    settings = Settings.read_file '.topcgen.yml'
     settings[:credentials] = {} if settings[:credentials].nil?
     settings[:credentials][:user] = options[:user] unless options[:user].nil?
     settings[:credentials][:pass] = options[:pass] unless options[:pass].nil?
     browser = Browser.new
 
-    browser.login settings[:credentials]
-    browser.search options[:class]
+    begin
+      browser.login settings[:credentials]
+      browser.search options[:class]
 
-    # TODO: search 
-    #       let user select the correct problem if necessary
-    #       get the problem doc
-    #       get the problem tests
-    #       generate class
-    #       generate unit tests
+      # TODO: search 
+      #       let user select the correct problem if necessary
+      #       get the problem doc
+      #       get the problem tests
+      #       generate class
+      #       generate unit tests
+    ensure
+      browser.logout
+    end
   end
 
   private
