@@ -2,23 +2,25 @@ require 'spec_helper'
 
 module Topcgen
   describe Browser do
+    @ignore = true
+
     before :each do
       @browser = Browser.new
     end
 
-    it "should login successfully with valid credentials" do
+    it "should login successfully with valid credentials", :if => !@ignore do
       settings = Settings.read_file 'settings.yml'
       @browser.login settings[:credentials]
       @browser.logged_in.should eq true
     end
 
-    it "should fail to login with invalid credentials" do
+    it "should fail to login with invalid credentials", :if => !@ignore do
       credentials = { :user => 'fuser', :pass => 'fpass' }
       @browser.login credentials
       @browser.logged_in.should eq false
     end
 
-    it "should logout successfully" do
+    it "should logout successfully", :if => !@ignore do
       @browser.logout
       @browser.logged_in.should eq false
     end

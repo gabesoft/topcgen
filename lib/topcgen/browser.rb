@@ -25,8 +25,7 @@ module Topcgen
     end
 
     def logout
-      url = get_uri 'Logout'
-      response = HTTP.get(url, @cookies)
+      do_logout
       response = go_home
       @logged_in = login_successfull response
     end
@@ -45,6 +44,13 @@ module Topcgen
       params[:password] = credentials[:pass]
       params[:username] = credentials[:user]
       response = HTTP.post(url, @cookies, params)
+      update_cookies response
+      response
+    end
+
+    def do_logout
+      url = get_uri 'Logout'
+      response = HTTP.get(url, @cookies)
       update_cookies response
       response
     end
