@@ -3,6 +3,7 @@
 Gemfile.lock
 NERD_tree_*
 settings.yml
+*.log
 pkg/*
 tmp/*
 cookies/*
