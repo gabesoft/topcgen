@@ -1,7 +1,4 @@
 require 'net/https'
-require 'hpricot'
-#require 'cgi'
-#require 'iconv'
 
 module Topcgen
   class Browser
@@ -35,74 +32,41 @@ module Topcgen
 
     def search(class_name)
       query = get_search_params class_name
-      url = get_uri('ProblemArchive', query)
+      url = get_uri :ProblemArchive, query
+      response = http_get url
 
-      response = HTTP.get(url, @cookies)
-      update_cookies response
-
-      doc = Hpricot response.body
-      container = doc/"form[@name='problemListForm']"
-
-      links = container/'a.statText'
-      links
-      .find_all { |a| a.inner_html.include? 'details' }
-      .map { |a| get_uri(nil, nil, a.attributes['href']) }
-      .map { |a| get_detail a }
-      #
-      #puts response.body
-      #<A HREF="/tc?module=ProblemDetail&rd=4725&pm=2268" class="statText">details</A>
-      #<form name="problemListForm" method="get">
+      result = TcSearch.new response.body
+      result.links.map do |link|
+        get_detail link
+      end
     end
 
     private
 
-    def get_detail url
-      response = HTTP.get(url, @cookies)
-      doc = Hpricot response.body
-      container = doc/'div.statTableIndent'
-
-      stmt_link = (container/'a.statText').find { |a| a.attributes['href'].include? 'problem_statement' }
-      round_link = (container/'a.statText').find { |a| a.attributes['href'].include? 'round_overview' }
-      row_used_as = (container/'tr').find { |tr| tr.inner_html.include? 'Used As:' }
-      row_categories = (container/'tr').find { |tr| tr.inner_html.include? 'Categories:' }
-      row_point_value = (container/'tr').find { |tr| tr.inner_html.include? 'Point Value' }
-
-      detail = {}
-      detail[:name] = stmt_link.inner_html.strip
-      detail[:statement_link] = stmt_link.attributes['href']
-      detail[:used_in] = round_link.inner_html.strip
-      detail[:used_as] = (row_used_as/'td')[1].inner_html.strip
-      detail[:categories] = (row_categories/'td')[1].inner_html.strip
-      detail[:point_value] = (row_point_value/'td')[1].inner_html.strip
-
-      puts detail
-      detail
+    def get_detail link
+      url = get_uri(nil, nil, link)
+      response = http_get url
+      TcDetail.new response.body
     end
 
     def do_login credentials
       url = get_uri
       params = {}
-      params[:module] =	'Login'
+      params[:module] =	:Login
       params[:nextpage] = 'http://community.topcoder.com/tc'
       params[:password] = credentials[:pass]
       params[:username] = credentials[:user]
-      response = HTTP.post(url, @cookies, params)
-      update_cookies response
-      response
+      http_post url, params
     end
 
     def do_logout
-      url = get_uri 'Logout'
-      response = HTTP.get(url, @cookies)
-      update_cookies response
-      response
+      url = get_uri :Logout
+      http_get url
     end
 
     def go_home
-      url = get_uri 'MyHome'
-      response = HTTP.get(url, @cookies)
-      update_cookies response
-      response
+      url = get_uri :MyHome
+      http_get url
     end
 
     def login_successfull response
@@ -131,6 +95,18 @@ module Topcgen
       params 
     end
 
+    def http_get url
+      response = HTTP.get(url, @cookies)
+      update_cookies response
+      response 
+    end
+
+    def http_post(url, params)      
+      response = HTTP.post(url, @cookies, params)
+      update_cookies response
+      response
+    end
+
     def get_uri(module_name=nil, params=nil, relative_path='/tc')
       query = params.nil? ? {} : params
       query[:module] = module_name unless module_name.nil?
@@ -142,7 +118,9 @@ module Topcgen
       base = "http://community.topcoder.com#{relative_path}"
 
       query = query_hash.map do |key, value|
-        param = value.nil? ? '' : URI.escape(value, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+        param = value.nil? ? '' : value
+        param = param.to_s if param.is_a? Symbol
+        param = URI.escape(param, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
         "#{key}=#{param}"
       end.join '&'
 
