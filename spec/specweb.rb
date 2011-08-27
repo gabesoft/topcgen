@@ -3,27 +3,30 @@ require 'fakeweb'
 FakeWeb.allow_net_connect = true # allow unregistered connections
 
 module Topcgen
-  SPEC_DOMAIN = 'http://www.myapp.com/'
-  AUTH_DOMAIN = 'https://www.myapp.com/'
-
   class SpecWeb
-    def self.register_get(relative_url, body, auth = false)
+    def initialize(spec_domain, auth_domain)
+      @spec_domain = spec_domain
+      @auth_domain = auth_domain
+      register_clear
+    end
+
+    def register_get(relative_url, body, auth = false)
       FakeWeb.register_uri :get, get_url(relative_url, auth), :body => body
     end
 
-    def self.register_post(relative_url, body, auth = false)
+    def register_post(relative_url, body, auth = false)
       FakeWeb.register_uri :post, get_url(relative_url, auth), :body => body
     end
 
-    def self.get_url(relative_url, auth = false)
+    def get_url(relative_url, auth = false)
       (get_domain auth) + relative_url
     end
 
-    def self.get_domain auth = false
-      auth ? AUTH_DOMAIN : SPEC_DOMAIN
+    def get_domain auth = false
+      auth ? @auth_domain : @spec_domain
     end
 
-    def self.register_clear
+    def register_clear
       FakeWeb.clean_registry
     end
   end
