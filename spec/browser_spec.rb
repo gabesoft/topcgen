@@ -46,6 +46,7 @@ module Topcgen
       results[0][:used_as].should eq 'Division II Level One'
       results[0][:categories].should eq 'Simulation, Dynamic Programming, Search'
       results[0][:point_value].should eq '250'
+
       results[0][:solution_java].should eq '/stat?c=problem_solution&cr=271521&rd=4725&pm=2268'
       results[0][:solution_cpp].should eq '/stat?c=problem_solution&cr=287130&rd=4725&pm=2268'
       results[0][:solution_csharp].should eq '/stat?c=problem_solution&cr=7454570&rd=4725&pm=2268'
@@ -55,6 +56,18 @@ module Topcgen
       results[1][:solution_cpp].should eq '/stat?c=problem_solution&cr=262936&rd=4725&pm=2288'
       results[1][:solution_csharp].should be nil
       results[1][:solution_vb].should be nil
+    end
+
+    it "should get problem statement" do
+      statement_url = '/stat?c=problem_statement&pm=2449&rd=5073'
+      @specWeb.register_get(statement_url, (get_contents 'spec/files/statement_dungeon_escape.html'))
+
+      statement = @browser.get_statement statement_url
+      statement[:class].should eq 'DungeonEscape'
+      statement[:method].should eq 'exitTime'
+      statement[:parameters].should eq 'String[], String[], String[], String[], int, int'
+      statement[:returns].should eq 'int'
+      statement[:signature].should eq 'int exitTime(String[] up, String[] down, String[] east, String[] west, int startLevel, int startEasting)'
     end
 
     def get_contents file

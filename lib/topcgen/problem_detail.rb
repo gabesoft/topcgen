@@ -3,8 +3,6 @@ require 'delegate'
 
 module Topcgen
   class ProblemDetail < DelegateClass(Hash)
-    attr_accessor :data
-
     def initialize html
       doc = Hpricot.parse html
       container = doc/'div.statTableIndent'

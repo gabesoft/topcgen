@@ -41,6 +41,12 @@ module Topcgen
       end
     end
 
+    def get_statement link
+      url = get_uri(nil, nil, link)
+      response = http_get url
+      ProblemStatement.new response.body
+    end
+
     private
 
     def get_detail link
