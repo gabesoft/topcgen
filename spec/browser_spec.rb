@@ -46,6 +46,15 @@ module Topcgen
       results[0][:used_as].should eq 'Division II Level One'
       results[0][:categories].should eq 'Simulation, Dynamic Programming, Search'
       results[0][:point_value].should eq '250'
+      results[0][:solution_java].should eq '/stat?c=problem_solution&cr=271521&rd=4725&pm=2268'
+      results[0][:solution_cpp].should eq '/stat?c=problem_solution&cr=287130&rd=4725&pm=2268'
+      results[0][:solution_csharp].should eq '/stat?c=problem_solution&cr=7454570&rd=4725&pm=2268'
+      results[0][:solution_vb].should eq '/stat?c=problem_solution&cr=7532592&rd=4725&pm=2268'
+
+      results[1][:solution_java].should eq '/stat?c=problem_solution&cr=277659&rd=4725&pm=2288'
+      results[1][:solution_cpp].should eq '/stat?c=problem_solution&cr=262936&rd=4725&pm=2288'
+      results[1][:solution_csharp].should be nil
+      results[1][:solution_vb].should be nil
     end
 
     def get_contents file
