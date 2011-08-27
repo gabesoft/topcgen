@@ -58,7 +58,7 @@ module Topcgen
       results[1][:solution_vb].should be nil
     end
 
-    it "should get problem statement" do
+    it "should get the problem statement" do
       statement_url = '/stat?c=problem_statement&pm=2449&rd=5073'
       @specWeb.register_get(statement_url, (get_contents 'spec/files/statement_dungeon_escape.html'))
 
@@ -68,6 +68,16 @@ module Topcgen
       statement[:parameters].should eq 'String[], String[], String[], String[], int, int'
       statement[:returns].should eq 'int'
       statement[:signature].should eq 'int exitTime(String[] up, String[] down, String[] east, String[] west, int startLevel, int startEasting)'
+    end
+
+    it "should get the problem solution with tests" do
+      solution_url = '/stat?c=problem_solution&cr=287266&rd=5073&pm=2449'
+      @specWeb.register_get(solution_url, (get_contents 'spec/files/solution_dungeon_escape.html'))
+
+      solution = @browser.get_solution solution_url
+      solution.tests.length.should eq 41
+      solution.tests[0].should eq ({:arguments=>"{\"0x4\",\"0x3\",\"0x3\"},{\"0x9\",\"009\",\"0x9\"},{\"0x9\",\"1x9\",\"009\"},{\"0x9\",\"0x0\",\"009\"},2,2", :expected=>"10"})
+      solution.tests[-1].should eq ({:arguments=>"{\"91\"},{\"99\"},{\"11\"},{\"11\"},0,0", :expected=>"2"})
     end
 
     def get_contents file

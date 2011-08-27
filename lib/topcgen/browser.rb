@@ -47,6 +47,12 @@ module Topcgen
       ProblemStatement.new response.body
     end
 
+    def get_solution link
+      url = get_uri(nil, nil, link)
+      response = http_get url
+      ProblemSolution.new response.body
+    end
+
     private
 
     def get_detail link
