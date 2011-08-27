@@ -35,7 +35,7 @@ module Topcgen
       url = get_uri :ProblemArchive, query
       response = http_get url
 
-      result = TcSearch.new response.body
+      result = ProblemSearch.new response.body
       result.links.map do |link|
         get_detail link
       end
@@ -46,14 +46,14 @@ module Topcgen
     def get_detail link
       url = get_uri(nil, nil, link)
       response = http_get url
-      TcDetail.new response.body
+      ProblemDetail.new response.body
     end
 
     def do_login credentials
       url = get_uri
       params = {}
       params[:module] =	:Login
-      params[:nextpage] = 'http://community.topcoder.com/tc'
+      params[:nextpage] = get_url '/tc'
       params[:password] = credentials[:pass]
       params[:username] = credentials[:user]
       http_post url, params

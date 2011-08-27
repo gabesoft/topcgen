@@ -1,7 +1,7 @@
 require 'hpricot'
 
 module Topcgen
-  class TcSearch
+  class ProblemSearch
     attr_accessor :links
 
     def initialize(html)

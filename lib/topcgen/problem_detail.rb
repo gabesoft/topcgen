@@ -2,7 +2,7 @@ require 'hpricot'
 require 'delegate'
 
 module Topcgen
-  class TcDetail < DelegateClass(Hash)
+  class ProblemDetail < DelegateClass(Hash)
     attr_accessor :data
 
     def initialize html
