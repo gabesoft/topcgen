@@ -3,7 +3,7 @@ require 'delegate'
 
 module Topcgen
   class ProblemSolution
-    attr_accessor :tests
+    attr_reader :tests
 
     def initialize html
       doc = Hpricot.parse html
@@ -11,7 +11,6 @@ module Topcgen
       container = (container/'table').find { |tr| tr.inner_html.include? 'System Test Results' }
       container = (container/'table').find { |tr| tr.inner_html.include? 'System Test Results' }
 
-      #puts container
       rows = container/'tr'
       rows = rows[4, rows.length]
 
@@ -19,7 +18,7 @@ module Topcgen
       rows.each do |r|
         cols = r/'td'
         dict = {}
-        if cols.length > 1
+        if cols.length > 4
           dict[:arguments] = safe_html cols[1].inner_html
           dict[:expected] = safe_html cols[3].inner_html
           @tests.push dict

@@ -16,7 +16,24 @@ module Topcgen
 
     begin
       browser.login settings[:credentials]
-      browser.search options[:class]
+      results = browser.search options[:class]
+
+      # TODO: implement the correct logic below
+      #
+      if results.length == 0
+        puts 'no problems found that match your search criteria'
+      elsif results.length > 1 
+        puts "found #{results.length} results"
+        results.each_with_index do |v, i| 
+          puts "#{i}: #{v[:name]} #{v[:used_in]} #{v[:point_value]}"
+        end
+      else
+        puts results[0]
+        puts browser.get_statement results[0][:statement_link]
+        solution = browser.get_solution results[0][:solution_java ]
+        puts solution.tests
+      end
+
 
       # TODO: search 
       #       let user select the correct problem if necessary
