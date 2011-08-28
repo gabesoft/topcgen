@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'net/https'
 
 module Topcgen
   describe MethodParser do

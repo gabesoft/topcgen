@@ -1,48 +1,77 @@
 module Topcgen
   class ValueParser
-    attr_reader :data
+    attr_reader :match
+    attr_reader :match_length
 
-    def initialize(type, text)
-      case type
+    def initialize type
+      @type = type
+    end
+
+    def parse text
+      case @type
       when 'String'
-        @data = parse_string text
+        parse_string text
       when 'int'
-        @data = parse_int text
+        parse_int text
       when 'long'
-        @data = parse_long text
+        parse_long text
       when 'String[]'
-        @data = parse_string_array text
+        parse_string_array text
       when 'int[]'
-        @data = parse_int_array text
+        parse_int_array text
       when 'long[]'
-        @data = parse_long_array text
+        parse_long_array text
       else
-        raise "unknown type #{type}"
+        raise "don't know how to parse values of type #{@type}"
       end
     end
 
     def parse_string text
-      text
+      patt = /^"(.+?)"(,\s*)?/x
+      match = patt.match text
+      @match = match[1]
+      @match_length = match[0].length
     end
 
     def parse_int text
-      Integer text
+      patt = /^(\d+)(,\s*)?/x
+      match = patt.match text
+      @match = Integer match[1]
+      @match_length = match[0].length
     end
 
     def parse_long text
-      Integer text.gsub("L", "")
+      patt = /^(\d+)(L?,\s*)?/x
+      match = patt.match text
+      @match = Integer match[1]
+      @match_length = match[0].length
     end
 
     def parse_string_array text
-      # TODO: implement
+      patt = /^\{(.+?)\}(,\s*)?/x
+      match = patt.match text
+      @match = match[1].split(/,\s*/).map do |s|
+        s.gsub(/^"|"$/, "")
+      end
+      @match_length = match[0].length
     end
 
     def parse_int_array text
-      # TODO: implement
+      patt = /^\{(.+?)\}(,\s*)?/x
+      match = patt.match text
+      @match = match[1].split(/,\s*/).map do |s|
+        Integer s
+      end
+      @match_length = match[0].length
     end
 
     def parse_long_array text
-      # TODO: implement
+      patt = /^\{(.+?)\}(,\s*)?/x
+      match = patt.match text
+      @match = match[1].split(/,\s*/).map do |s|
+        Integer s.gsub(/L$?/, "")
+      end
+      @match_length = match[0].length
     end
   end
 end
