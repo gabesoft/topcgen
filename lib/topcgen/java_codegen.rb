@@ -1,5 +1,47 @@
 module Topcgen
   module JAVA
+    # TODO: how do we deal with field declaration with assignment
+    #       vs just an assignment
+    #       int x = 8;
+    #       x = 9;
+    #class Field
+      
+    #end
+
+    class Val
+      def initialize(value, type)
+        @value = value
+        @type = type
+      end
+
+      def gen stream
+        case @type
+        when 'int'
+          stream << @value
+        when 'long'
+          stream << "#{@value}L"
+        when 'String'
+          stream << "\"#{@value}\""
+        when 'int[]'
+          stream << "{ #{@value.join(', ')} }"
+        when 'long[]'
+          stream << "{ #{@value.map { |v| "#{v}L" }.join(', ')} }"
+        when 'String[]'
+          stream << "{ #{@value.map { |v| "\"#{v}\"" }.join(', ')} }"
+        end
+      end
+    end
+    
+    class Var
+      def initialize name
+        @name = name
+      end
+
+      def gen stream
+        stream << @name
+      end
+    end
+
     class Package
       def initialize path
         @path = path
@@ -22,7 +64,17 @@ module Topcgen
       end
     end
 
-    class U             # utility class
+    class Comment
+      def initialize text
+        @text = text
+      end
+
+      def gen(stream, tab_count=0)
+        stream.puts "#{U.tabs tab_count}// #{@text}"
+      end
+    end
+
+    class U
       @@TAB_SIZE = 2
 
       def self.tabs tab_count
