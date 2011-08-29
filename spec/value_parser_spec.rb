@@ -54,7 +54,7 @@ module Topcgen
       values = types.map do |t|
         parser = ValueParser.new t
         parser.parse str
-        str = str.slice(parser.match_length, str.length)
+        str.slice!(0..parser.match_length - 1)
         parser.match
       end
       values.length.should eq 8

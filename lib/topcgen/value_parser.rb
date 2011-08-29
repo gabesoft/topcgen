@@ -26,51 +26,40 @@ module Topcgen
       end
     end
 
+    private
+
     def parse_string text
-      patt = /^"(.+?)"(,\s*)?/x
-      match = patt.match text
-      @match = match[1]
-      @match_length = match[0].length
+      parse_text(/^"(.+?)"(,\s*)?/x, text)
     end
 
     def parse_int text
-      patt = /^(\d+)(,\s*)?/x
-      match = patt.match text
-      @match = Integer match[1]
-      @match_length = match[0].length
+      parse_text(/^(\d+)(,\s*)?/x, text)
+      @match = Integer @match
     end
 
     def parse_long text
-      patt = /^(\d+)(L?,\s*)?/x
-      match = patt.match text
-      @match = Integer match[1]
-      @match_length = match[0].length
+      parse_text(/^(\d+)(L?,\s*)?/x, text)
+      @match = Integer @match
     end
 
     def parse_string_array text
-      patt = /^\{(.+?)\}(,\s*)?/x
-      match = patt.match text
-      @match = match[1].split(/,\s*/).map do |s|
-        s.gsub(/^"|"$/, "")
-      end
-      @match_length = match[0].length
+      parse_text(/^\{(.+?)\}(,\s*)?/x, text)
+      @match = @match.split(/,\s*/).map { |s| s.gsub(/^"|"$/, "") }
     end
 
     def parse_int_array text
-      patt = /^\{(.+?)\}(,\s*)?/x
-      match = patt.match text
-      @match = match[1].split(/,\s*/).map do |s|
-        Integer s
-      end
-      @match_length = match[0].length
+      parse_text(/^\{(.+?)\}(,\s*)?/x, text)
+      @match = @match.split(/,\s*/).map { |s| Integer s }
     end
 
     def parse_long_array text
-      patt = /^\{(.+?)\}(,\s*)?/x
-      match = patt.match text
-      @match = match[1].split(/,\s*/).map do |s|
-        Integer s.gsub(/L$?/, "")
-      end
+      parse_text(/^\{(.+?)\}(,\s*)?/x, text)
+      @match = @match.split(/,\s*/).map { |s| Integer s.gsub(/L$?/, "") }
+    end
+
+    def parse_text(pattern, text)
+      match = pattern.match text
+      @match = match[1]
       @match_length = match[0].length
     end
   end
