@@ -1,44 +1,119 @@
 module Topcgen
   module JAVA
-    # TODO: how do we deal with field declaration with assignment
-    #       vs just an assignment
-    #       int x = 8;
-    #       x = 9;
-    #class Field
-      
-    #end
+    # TODO: put in java_codegen
+    def self.val(type, value)
+      Value.new type, value
+    end
 
-    class Val
-      def initialize(value, type)
+    def self.var(name, type, value=nil)
+      Variable.new name, type, value
+    end
+
+    def self.pkg(path)
+      Package.new path
+    end
+
+    def self.import(path, object='*', static=false)
+      Import.new path, object, static
+    end
+
+    def self.ctor(type)
+      New.new type
+    end
+
+    def self.arr(type, value, length=0)
+      NewArray.new type, value, length
+    end
+
+    def self.comment(text)
+      Comment.new text
+    end
+
+    def self.call(name, *args)
+      FunCall.new name, args
+    end
+
+    # TODO: put in java_codegen_impl
+    class FunCall
+      def initialize(name, args)
+        @name = name
+        @args = args
+      end
+
+      def gen(stream, tab_count=0)
+        stream.puts "#{U.tabs tab_count}#{to_s}"
+      end
+
+      def to_s
+        "#{@name}(#{@args.map { |a| a.to_s }.join(', ')})"
+      end
+    end
+    class NewArray
+      def initialize(type, value, length=0)
+        @type = type
+        @value = value
+        @length = length
+      end
+
+      def gen(stream, tab_count=0)
+        stream.puts "#{U.tabs tab_count}#{to_s}"
+      end
+
+      def to_s
+        "new #{@type}[#{@value.nil? ? @length : ''}]#{@value.nil? ? '' : ' ' + @value.to_s}"
+      end
+    end
+    class New
+      def initialize(type)
+        @type = type
+      end
+
+      def gen(stream, tab_count=0)
+        stream.puts "#{U.tabs tab_count}#{to_s}"
+      end
+
+      def to_s
+        "new #{@type}()"
+      end
+    end
+
+    class Value
+      def initialize(type, value)
         @value = value
         @type = type
       end
 
-      def gen stream
+      def gen(stream, tab_count=0)
+        stream.puts "#{U.tabs tab_count}#{to_s}"
+      end
+
+      def to_s
         case @type
         when 'int'
-          stream << @value
+          @value.to_s
         when 'long'
-          stream << "#{@value}L"
+          "#{@value}L"
         when 'String'
-          stream << "\"#{@value}\""
+          "\"#{@value}\""
         when 'int[]'
-          stream << "{ #{@value.join(', ')} }"
+          "{ #{@value.join(', ')} }"
         when 'long[]'
-          stream << "{ #{@value.map { |v| "#{v}L" }.join(', ')} }"
+          "{ #{@value.map { |v| "#{v}L" }.join(', ')} }"
         when 'String[]'
-          stream << "{ #{@value.map { |v| "\"#{v}\"" }.join(', ')} }"
+          "{ #{@value.map { |v| "\"#{v}\"" }.join(', ')} }"
         end
       end
     end
-    
-    class Var
-      def initialize name
+
+    class Variable
+      def initialize(name, type, value=nil)
         @name = name
+        @type = type
+        @value = value
       end
 
-      def gen stream
-        stream << @name
+      def gen(stream, tab_count=0)
+        stream.puts "#{U.tabs tab_count}#{@type} #{@name}#{@value.nil? ? '' : ' = ' + @value.to_s};"
       end
     end
 
