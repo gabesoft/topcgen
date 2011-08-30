@@ -7,6 +7,41 @@ module Topcgen
         @stream = StringIO.new
       end
 
+      describe Class do
+        it "should output class" do
+          stmt = JAVA.clas 'Kiloman', 
+            (JAVA.comment 'SRM 234 Div 2 - 1000'), 
+            [ (JAVA.var 'int', 'a', 0) ],
+            [ (JAVA.method 'foo', 'int', (JAVA.annotation 'test'), nil, [], [ (JAVA.ret (JAVA.default 'int')) ]) ]
+          stmt.gen @stream
+          @stream.string.should eq "// SRM 234 Div 2 - 1000\npublic class Kiloman {\n  int a = 0;\n\n  @test\n  public int foo() {\n    return 0;\n  }\n}\n"
+        end
+      end
+
+      describe Method do
+        it "should output method" do
+          stmt = JAVA.method('foo', 'int', nil, nil, 
+                             [ { :name => 'a', :type => 'long' }, { :name => 'b', :type => 'String' } ], 
+                             [ (JAVA.var 'int[]', 'x', (JAVA.arr 'int', [4, 5])), (JAVA.ret (JAVA.val 'int', 0)) ])
+          stmt.gen @stream
+          @stream.string.should eq "public int foo(long a, String b) {\n  int[] x = new int[] { 4, 5 };\n  return 0;\n}\n"
+        end
+      end
+
+      describe Return do
+        it "should output return statement" do
+          stmt = JAVA.ret (JAVA.val 'long', 45)
+          stmt.gen @stream
+          @stream.string.should eq "return 45L;\n"
+        end
+
+        it "should output return null statement" do
+          stmt = JAVA.ret (JAVA.default 'int[]')
+          stmt.gen @stream
+          @stream.string.should eq "return null;\n"
+        end
+      end
+
       describe FunCall do
         it "should output function call" do
           stmt = JAVA.call 'foo', (JAVA.call 'bar', (JAVA.val 'String', 'a')), (JAVA.val 'long', 45), 'b'
@@ -15,7 +50,7 @@ module Topcgen
 
         it "should output function call with array parameter" do
           stmt = JAVA.call 'foo', 
-            (JAVA.arr 'int', (JAVA.val 'int[]', [2,4,5])), 
+            (JAVA.arr 'int', [2,4,5]), 
             (JAVA.arr 'String', (JAVA.val 'String[]', ["a","b"])), 
             (JAVA.val 'long', 5)
           stmt.to_s.should eq 'foo(new int[] { 2, 4, 5 }, new String[] { "a", "b" }, 5L)'
@@ -43,15 +78,21 @@ module Topcgen
 
       describe Variable do
         it "should output variable declaration" do
-          stmt = JAVA.var 'a', 'String'
+          stmt = JAVA.var 'String', 'a'
           stmt.gen @stream
           @stream.string.should eq "String a;\n"
         end
 
         it "should output variable declaration and initialization" do
-          stmt = JAVA.var 'a', 'int[]', (JAVA.val 'int[]', [ 1, 2, 4 ])
+          stmt = JAVA.var 'int[]', 'a', (JAVA.val 'int[]', [ 1, 2, 4 ])
           stmt.gen @stream
           @stream.string.should eq "int[] a = { 1, 2, 4 };\n"
+        end
+
+        it "should output variable declaration and initialization with new array" do
+          stmt = JAVA.var 'int[]', 'a', (JAVA.arr 'int', (JAVA.val 'int[]', [4,5,9,9]))
+          stmt.gen @stream
+          @stream.string.should eq "int[] a = new int[] { 4, 5, 9, 9 };\n"
         end
       end
 
