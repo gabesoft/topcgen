@@ -2,7 +2,7 @@ module Topcgen
   module JAVA
     # TODO: refactor and put necessary values in settings
     #
-    def self.problem_class(stream, method, info)
+    def self.problem_class(stream, defn, info)
       pkg(get_package info[:categories]).gen stream
       stream.puts ''
 
@@ -12,10 +12,10 @@ module Topcgen
       comments = [ 
         comment(info[:used_in] + ' ' + info[:used_as] + ' - ' + info[:point_value]),
         comment(info[:categories]), 
-        comment(info[:statement_link]) 
+        comment(info[:statement_link_full]) 
       ]
-      return_gen = ret (default method.return_type) 
-      method_gen = method(method.name, method.return_type, nil, nil, method.parameters, [ return_gen ])
+      return_gen = ret (default defn.return_type) 
+      method_gen = method(defn.name, defn.return_type, nil, nil, defn.parameters, [ return_gen ])
       class_gen = clas(info[:name], comments, nil, [ method_gen ])
       class_gen.gen stream
     end

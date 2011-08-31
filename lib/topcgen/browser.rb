@@ -58,7 +58,9 @@ module Topcgen
     def get_detail link
       url = get_uri(nil, nil, link)
       response = http_get url
-      ProblemDetail.new response.body
+      detail = ProblemDetail.new response.body
+      detail[:statement_link_full] = get_url detail[:statement_link]
+      detail
     end
 
     def do_login credentials
