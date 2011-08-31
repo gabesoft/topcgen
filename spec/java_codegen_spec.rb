@@ -10,7 +10,7 @@ module Topcgen
       describe Class do
         it "should output class" do
           stmt = JAVA.clas 'Kiloman', 
-            (JAVA.comment 'SRM 234 Div 2 - 1000'), 
+            [ (JAVA.comment 'SRM 234 Div 2 - 1000') ], 
             [ (JAVA.var 'int', 'a', 0) ],
             [ (JAVA.method 'foo', 'int', (JAVA.annotation 'test'), nil, [], [ (JAVA.ret (JAVA.default 'int')) ]) ]
           stmt.gen @stream

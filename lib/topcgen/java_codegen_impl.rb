@@ -1,21 +1,23 @@
 module Topcgen
   module JAVA
     class Class
-      def initialize(name, comment, fields, methods, visibility)
+      def initialize(name, comments, fields, methods, visibility)
         @name = name
-        @comment = comment
+        @comments = comments
         @fields = fields
         @methods = methods
         @visibility = visibility
       end
 
       def gen(stream, tab_count=0)
-        @comment.gen(stream, tab_count) unless @comment.nil?
+        @comments.each do |c|
+          c.gen(stream, tab_count)
+        end
         stream.puts "#{T.tabs tab_count}#{@visibility} class #{@name} {"
         @fields.each do |f|
           f.gen(stream, tab_count + 1)
         end
-        stream.puts ''
+        stream.puts '' if @fields.length > 0
         @methods.each do |m|
           m.gen(stream, tab_count + 1)
         end

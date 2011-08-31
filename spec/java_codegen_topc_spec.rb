@@ -5,6 +5,7 @@ module Topcgen
     describe JAVA do
       it "should generate the problem class" do
         info = {:name=>"KiloManX", :statement_link=>"/stat?c=problem_statement&pm=2288&rd=4725", :used_in=>"SRM 181", :used_as=>"Division I Level Three", :categories=>"Dynamic Programming, Search", :point_value=>"1000", :solution_java=>"/stat?c=problem_solution&cr=277659&rd=4725&pm=2288", :solution_cpp=>"/stat?c=problem_solution&cr=262936&rd=4725&pm=2288"}
+        info[:statement_link] = 'http://community.topcoder.com' + info[:statement_link]
         stmt = {:class=>"KiloManX", :method=>"leastShots", :parameters=>"String[], int[]", :returns=>"int[]", :signature=>"int[] leastShots(String[] damageChart, int[] bossHealth)"}
         tests = [
           {:arguments=>"{\"070\",\"500\",\"140\"},{150,150,150}", :expected=>"{ 218 }"},
@@ -17,7 +18,16 @@ module Topcgen
           r_types = [ stmt[:returns] ]
           { :arguments => parse(a_types, t[:arguments]), :expected => parse(r_types, t[:expected]) }
         end
-        JAVA.problem_class(nil, nil).should eq 'not_implemented'
+        stream = StringIO.new
+        file = File.open('spec/files/KiloManX.java', 'r') do |f|
+          f.rewind
+          f.read
+        end
+        
+        JAVA.problem_class(stream, method, info)
+        stream.string.should eq file
+
+        stream.close
       end
 
       # TODO: move to ValueParser.parse

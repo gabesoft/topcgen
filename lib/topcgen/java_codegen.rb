@@ -57,10 +57,11 @@ module Topcgen
       Method.new name, return_type, annotation, comment, parameters, statements, visibility
     end
 
-    def self.clas(name, comment, fields, methods, visibility='public')
+    def self.clas(name, comments, fields, methods, visibility='public')
+      comments = [] if comments.nil?
       fields = [] if fields.nil?
       methods = [] if methods.nil?
-      Class.new name, comment, fields, methods, visibility
+      Class.new name, comments, fields, methods, visibility
     end
   end
 end
