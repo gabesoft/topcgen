@@ -27,34 +27,34 @@ module Topcgen
 
     def self.gen_test_class(stream, method_def, info, tests)
       field = var info[:name], info[:name].downcase, (ctor info[:name])
-      return_type = method_def.return_type
-      params = method_def.parameters
 
+      args_def = method_def.parameters
+      return_type = method_def.return_type
+      return_type_is_array = !(/\[\]$/ =~ return_type).nil?
+
+      assert_name = return_type_is_array ? 'assertArrayEquals' : 'assertEquals'
+      actual_arguments = args_def.map { |p| p[:name] }
+      actual = call "#{info[:name].downcase}.#{method_def.name}", *actual_arguments
+      test_annotation = annotation 'Test'
+
+      # TODO: need to put spaces between methods
+      #       clean up code
       methods = tests.each_with_index.map do |t, i|
         name = "case#{i + 1}"
         args = t[:arguments]
-        variable_declarations = params.zip(args).map do |p, v|
-          var p[:type], p[:name], (val p[:type], v)
-        end
 
-        assert_name = is_array(return_type) ? 'assertArrayEquals' : 'assertEquals'
-        expected = is_array(return_type) ? arr(return_type, t[:expected]) : val(return_type, t[:expected])
-        actual_arguments = params.map { |p| p[:name] }
-        actual = call "#{info[:name].downcase}.#{method_def.name}", *actual_arguments
+        statements = args_def.zip(args).map { |a, v| var a[:type], a[:name], (val a[:type], v) }
+
+        expected = return_type_is_array ? arr(return_type, t[:expected]) : val(return_type, t[:expected])
         assert_call = call assert_name, expected, actual
-        test_annotation = annotation 'Test'
 
-        statements = variable_declarations + [ assert_call ]
-	      method(name, 'void', nil, statements, test_annotation)
+        statements.push assert_call
+        method(name, 'void', nil, statements, test_annotation)
       end
 
       test_class_name = "#{info[:name]}Test"
       test_class = clas test_class_name, [ field ], methods
       test_class.gen stream
-    end
-
-    def self.is_array type
-      !(/\[\]$/ =~ type).nil?
     end
 
     def self.gen_package(stream, package_root, categories)

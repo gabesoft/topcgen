@@ -85,8 +85,6 @@ module Topcgen
       end
 
       def to_s
-        puts @type
-        puts @value.to_s
         "new #{@type}[#{@value.nil? ? @length : ''}]#{@value.nil? ? '' : ' ' + @value.to_s}"
       end
     end
