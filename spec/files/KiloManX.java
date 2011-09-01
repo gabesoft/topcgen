@@ -10,4 +10,8 @@ public class KiloManX {
   public int[] leastShots(String[] damageChart, int[] bossHealth) {
     return null;
   }
+
+  private void debug(Object... os) {
+    System.out.println(Arrays.deepToString(os));
+  }
 }

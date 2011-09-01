@@ -76,10 +76,20 @@ module Topcgen
         comment(info[:categories].downcase),
         comment(info[:statement_link_full])
       ]
-      return_gen = ret (default method_def.return_type)
-      method_gen = method(method_def.name, method_def.return_type, method_def.parameters, [ return_gen ])
-      class_gen = clas(info[:name], nil, [ method_gen ], comments)
+
+      ret_statement = ret (default method_def.return_type)
+      dbg_method = get_debug_method
+      main_method = method(method_def.name, method_def.return_type, method_def.parameters, [ ret_statement ])
+      
+      class_gen = clas(info[:name], nil, [ main_method, newline, dbg_method ], comments)
       class_gen.gen stream
+    end
+
+    def self.get_debug_method
+      argument = 'os'
+      statement = call 'System.out.println', (call 'Arrays.deepToString', argument)
+      parameter = { :type => 'Object...', :name => argument }
+      method 'debug', 'void', [ parameter ], [ statement ], nil, nil, 'private'
     end
 
     def self.get_package(package_root, problem_categories)
