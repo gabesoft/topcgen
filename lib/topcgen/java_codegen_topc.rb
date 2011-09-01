@@ -37,8 +37,6 @@ module Topcgen
       actual = call "#{info[:name].downcase}.#{method_def.name}", *actual_arguments
       test_annotation = annotation 'Test'
 
-      # TODO: need to put spaces between methods
-      #       clean up code
       methods = tests.each_with_index.map do |t, i|
         name = "case#{i + 1}"
         args = t[:arguments]
@@ -49,7 +47,8 @@ module Topcgen
         assert_call = call assert_name, expected, actual
 
         statements.push assert_call
-        method(name, 'void', nil, statements, test_annotation)
+        test_method = method(name, 'void', nil, statements, test_annotation)
+        combine test_method, newline
       end
 
       test_class_name = "#{info[:name]}Test"
@@ -61,23 +60,23 @@ module Topcgen
       package_path = get_package package_root, categories
       pkg_gen = pkg package_path
       pkg_gen.gen stream
-      stream.puts ''
+      newline.gen stream
     end
 
     def self.gen_imports(stream, imports)
-      imports.each { |i| 
-        import(i[:path], i[:object], i[:static]).gen stream 
-      }
-      stream.puts '' if imports.length > 0;
+      imports.each do |i|
+        import(i[:path], i[:object], i[:static]).gen stream
+      end
+      newline.gen stream if imports.length > 0;
     end
 
     def self.gen_class(stream, method_def, info)
-      comments = [ 
+      comments = [
         comment(info[:used_in] + ' ' + info[:used_as] + ' - ' + info[:point_value]),
-        comment(info[:categories].downcase), 
-        comment(info[:statement_link_full]) 
+        comment(info[:categories].downcase),
+        comment(info[:statement_link_full])
       ]
-      return_gen = ret (default method_def.return_type) 
+      return_gen = ret (default method_def.return_type)
       method_gen = method(method_def.name, method_def.return_type, method_def.parameters, [ return_gen ])
       class_gen = clas(info[:name], nil, [ method_gen ], comments)
       class_gen.gen stream

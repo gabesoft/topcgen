@@ -73,6 +73,7 @@ module Topcgen
         "#{@name}(#{@args.map { |a| a.to_s }.join(', ')})"
       end
     end
+
     class NewArray
       def initialize(type, value, length)
         @type = type
@@ -187,6 +188,24 @@ module Topcgen
 
       def to_s
         "@#{@text}"
+      end
+    end
+
+    class Blank
+      def gen(stream, tab_count=0)
+        stream.puts ''
+      end
+    end
+
+    class Multiple
+      def initialize statements
+        @statements = statements
+      end
+
+      def gen(stream, tab_count=0)
+        @statements.each do |s|
+          s.gen stream, tab_count
+        end
       end
     end
 

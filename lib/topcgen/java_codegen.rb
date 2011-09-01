@@ -1,5 +1,13 @@
 module Topcgen
   module JAVA
+    def self.combine *statements
+      Multiple.new statements
+    end
+
+    def self.newline
+      Blank.new
+    end
+
     def self.val(type, value)
       Value.new type, value
     end
