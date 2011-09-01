@@ -13,6 +13,8 @@ module Topcgen
     end
 
     def self.import(path, object='*', static=false)
+      object = '*' if object.nil?
+      static = false if static.nil?
       Import.new path, object, static
     end
 
@@ -21,9 +23,9 @@ module Topcgen
     end
 
     def self.arr(type, value, length=0)
-      value = Value.new("#{type}[]", value) if !value.nil? && (value.instance_of? Array)
       type = type.gsub(/\[\]$/, "")
-      NewArray.new type, value, length
+      value_gen = (value.instance_of? Array) ? Value.new("#{type}[]", value) : value
+      NewArray.new type, value_gen, length
     end
 
     def self.comment(text)
@@ -54,6 +56,8 @@ module Topcgen
     end
 
     def self.method(name, return_type, parameters, statements, annotation=nil, comment=nil, visibility='public')
+      parameters = [] if parameters.nil?
+      statements = [] if statements.nil?
       Method.new name, return_type, parameters, statements, annotation, comment, visibility
     end
 

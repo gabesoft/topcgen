@@ -1,34 +1,80 @@
 module Topcgen
   module JAVA
     def self.problem_class(stream, method_def, info)
-      gen_package(stream, info)
-      gen_imports(stream, info)
+      gen_package(stream, info[:package_root], info[:categories])
+      gen_imports(stream, info[:imports])
       gen_class(stream, method_def, info)
     end
 
-    def self.problem_tests(stream, data)
-      # TODO: write unit tests by comparing to an existing file
-      #
+    def self.problem_tests(stream, method_def, info, tests)
+      gen_test_package(stream, info[:package_root], info[:categories])
+      gen_test_imports(stream, info[:imports], info[:package_root], info[:categories])
+      gen_test_class(stream, method_def, info, tests)
     end
 
     private
 
-    def self.gen_package(stream, info)
-      package_path = get_package info[:package_root], info[:categories]
-      pkg(package_path).gen stream
+    def self.gen_test_package(stream, package_root, categories)
+      gen_package stream, "#{package_root}.test", categories
+    end
+
+    def self.gen_test_imports(stream, imports, package_root, categories)
+      imports = imports.clone()
+      package = get_package package_root, categories
+      imports.push({ :path => package })
+      gen_imports stream, imports
+    end
+
+    def self.gen_test_class(stream, method_def, info, tests)
+      field = var info[:name], info[:name].downcase, (ctor info[:name])
+      return_type = method_def.return_type
+      params = method_def.parameters
+
+      methods = tests.each_with_index.map do |t, i|
+        name = "case#{i + 1}"
+        args = t[:arguments]
+        variable_declarations = params.zip(args).map do |p, v|
+          var p[:type], p[:name], (val p[:type], v)
+        end
+
+        assert_name = is_array(return_type) ? 'assertArrayEquals' : 'assertEquals'
+        expected = is_array(return_type) ? arr(return_type, t[:expected]) : val(return_type, t[:expected])
+        actual_arguments = params.map { |p| p[:name] }
+        actual = call "#{info[:name].downcase}.#{method_def.name}", *actual_arguments
+        assert_call = call assert_name, expected, actual
+        test_annotation = annotation 'Test'
+
+        statements = variable_declarations + [ assert_call ]
+	      method(name, 'void', nil, statements, test_annotation)
+      end
+
+      test_class_name = "#{info[:name]}Test"
+      test_class = clas test_class_name, [ field ], methods
+      test_class.gen stream
+    end
+
+    def self.is_array type
+      !(/\[\]$/ =~ type).nil?
+    end
+
+    def self.gen_package(stream, package_root, categories)
+      package_path = get_package package_root, categories
+      pkg_gen = pkg package_path
+      pkg_gen.gen stream
       stream.puts ''
     end
 
-    def self.gen_imports(stream, info)
-      imports = info[:imports]
-      imports.each { |i| import(i).gen stream }
+    def self.gen_imports(stream, imports)
+      imports.each { |i| 
+        import(i[:path], i[:object], i[:static]).gen stream 
+      }
       stream.puts '' if imports.length > 0;
     end
 
     def self.gen_class(stream, method_def, info)
       comments = [ 
         comment(info[:used_in] + ' ' + info[:used_as] + ' - ' + info[:point_value]),
-        comment(info[:categories]), 
+        comment(info[:categories].downcase), 
         comment(info[:statement_link_full]) 
       ]
       return_gen = ret (default method_def.return_type) 

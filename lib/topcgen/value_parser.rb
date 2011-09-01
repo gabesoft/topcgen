@@ -26,6 +26,16 @@ module Topcgen
       end
     end
 
+    def self.parse(types, values)
+      input = values
+      types.map do |t|
+        parser = ValueParser.new t
+        parser.parse input
+        input.slice!(0..parser.match_length - 1)
+        parser.match
+      end
+    end
+
     private
 
     def parse_string text

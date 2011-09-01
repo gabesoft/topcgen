@@ -66,7 +66,7 @@ module Topcgen
       end
 
       def gen(stream, tab_count=0)
-        stream.puts "#{T.tabs tab_count}#{to_s}"
+        stream.puts "#{T.tabs tab_count}#{to_s};"
       end
 
       def to_s
@@ -85,6 +85,8 @@ module Topcgen
       end
 
       def to_s
+        puts @type
+        puts @value.to_s
         "new #{@type}[#{@value.nil? ? @length : ''}]#{@value.nil? ? '' : ' ' + @value.to_s}"
       end
     end
@@ -126,6 +128,8 @@ module Topcgen
           "{ #{@value.map { |v| "#{v}L" }.join(', ')} }"
         when 'String[]'
           "{ #{@value.map { |v| "\"#{v}\"" }.join(', ')} }"
+        else
+          raise "don't know how to convert value of type #{@type} to string"
         end
       end
     end
