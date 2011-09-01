@@ -1,7 +1,7 @@
 module Topcgen
   module JAVA
     class Class
-      def initialize(name, comments, fields, methods, visibility)
+      def initialize(name, fields, methods, comments, visibility)
         @name = name
         @comments = comments
         @fields = fields
@@ -26,7 +26,7 @@ module Topcgen
     end
 
     class Method
-      def initialize(name, return_type, annotation, comment, parameters, statements, visibility)
+      def initialize(name, return_type, parameters, statements, annotation, comment, visibility)
         @name = name
         @return_type = return_type
         @annotation = annotation

@@ -53,15 +53,15 @@ module Topcgen
       Annotation.new text
     end
 
-    def self.method(name, return_type, annotation, comment, parameters, statements, visibility='public')
-      Method.new name, return_type, annotation, comment, parameters, statements, visibility
+    def self.method(name, return_type, parameters, statements, annotation=nil, comment=nil, visibility='public')
+      Method.new name, return_type, parameters, statements, annotation, comment, visibility
     end
 
-    def self.clas(name, comments, fields, methods, visibility='public')
+    def self.clas(name, fields, methods, comments=nil, visibility='public')
       comments = [] if comments.nil?
       fields = [] if fields.nil?
       methods = [] if methods.nil?
-      Class.new name, comments, fields, methods, visibility
+      Class.new name, fields, methods, comments, visibility
     end
   end
 end

@@ -9,18 +9,17 @@ module Topcgen
 
       describe Class do
         it "should output class" do
-          stmt = JAVA.clas 'Kiloman', 
-            [ (JAVA.comment 'SRM 234 Div 2 - 1000') ], 
-            [ (JAVA.var 'int', 'a', 0) ],
-            [ (JAVA.method 'foo', 'int', (JAVA.annotation 'test'), nil, [], [ (JAVA.ret (JAVA.default 'int')) ]) ]
-          stmt.gen @stream
+          method = JAVA.method 'foo', 'int', [], [ (JAVA.ret (JAVA.default 'int')) ], (JAVA.annotation 'test')
+          afield = JAVA.var 'int', 'a', 0
+          clas = JAVA.clas 'Kiloman', [ afield ], [ method ], [ (JAVA.comment 'SRM 234 Div 2 - 1000') ]
+          clas.gen @stream
           @stream.string.should eq "// SRM 234 Div 2 - 1000\npublic class Kiloman {\n  int a = 0;\n\n  @test\n  public int foo() {\n    return 0;\n  }\n}\n"
         end
       end
 
       describe Method do
         it "should output method" do
-          stmt = JAVA.method('foo', 'int', nil, nil, 
+          stmt = JAVA.method('foo', 'int', 
                              [ { :name => 'a', :type => 'long' }, { :name => 'b', :type => 'String' } ], 
                              [ (JAVA.var 'int[]', 'x', (JAVA.arr 'int', [4, 5])), (JAVA.ret (JAVA.val 'int', 0)) ])
           stmt.gen @stream

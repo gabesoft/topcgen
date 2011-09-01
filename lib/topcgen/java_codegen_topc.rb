@@ -1,23 +1,9 @@
 module Topcgen
   module JAVA
-    # TODO: refactor and put necessary values in settings
-    #
-    def self.problem_class(stream, defn, info)
-      pkg(get_package info[:categories]).gen stream
-      stream.puts ''
-
-      import('java.util').gen stream # TODO: this should come from settings
-      stream.puts ''
-      
-      comments = [ 
-        comment(info[:used_in] + ' ' + info[:used_as] + ' - ' + info[:point_value]),
-        comment(info[:categories]), 
-        comment(info[:statement_link_full]) 
-      ]
-      return_gen = ret (default defn.return_type) 
-      method_gen = method(defn.name, defn.return_type, nil, nil, defn.parameters, [ return_gen ])
-      class_gen = clas(info[:name], comments, nil, [ method_gen ])
-      class_gen.gen stream
+    def self.problem_class(stream, method_def, info)
+      gen_package(stream, info)
+      gen_imports(stream, info)
+      gen_class(stream, method_def, info)
     end
 
     def self.problem_tests(stream, data)
@@ -27,14 +13,37 @@ module Topcgen
 
     private
 
-    def self.get_package problem_categories
-      root = 'topc' # TODO: this should come from settings
+    def self.gen_package(stream, info)
+      package_path = get_package info[:package_root], info[:categories]
+      pkg(package_path).gen stream
+      stream.puts ''
+    end
+
+    def self.gen_imports(stream, info)
+      imports = info[:imports]
+      imports.each { |i| import(i).gen stream }
+      stream.puts '' if imports.length > 0;
+    end
+
+    def self.gen_class(stream, method_def, info)
+      comments = [ 
+        comment(info[:used_in] + ' ' + info[:used_as] + ' - ' + info[:point_value]),
+        comment(info[:categories]), 
+        comment(info[:statement_link_full]) 
+      ]
+      return_gen = ret (default method_def.return_type) 
+      method_gen = method(method_def.name, method_def.return_type, method_def.parameters, [ return_gen ])
+      class_gen = clas(info[:name], nil, [ method_gen ], comments)
+      class_gen.gen stream
+    end
+
+    def self.get_package(package_root, problem_categories)
       all_categories = get_categories
       categories = problem_categories.split(/,\s*/).map do |c|
         all_categories[c]
       end
       categories.sort! { |c| c[:order] }
-      "#{root}.#{categories[-1][:package]}"
+      "#{package_root}.#{categories[-1][:package]}"
     end
 
     def self.get_categories
