@@ -9,6 +9,7 @@ module Topcgen
       settings = Settings.read_file 'spec/files/settings.yml'
       settings[:credentials].should eq credentials
       settings[:package_root].should eq 'aroot'
+      settings[:main_imports].should eq [ { :path => 'java.util' }, { :path => 'java.io' } ]
     end
 
     it "should return an empty dictionary on non-existent file" do

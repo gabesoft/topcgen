@@ -5,6 +5,7 @@ require 'optparse'
 require 'pp'
 require 'json'
 require 'readline'
+require 'fileutils'
 
 module Topcgen
   def self.run
@@ -28,7 +29,7 @@ module Topcgen
           puts "#{i + 1}: #{v[:name]} #{v[:used_in]} #{v[:point_value]}"
         end
 
-        message = 'please select a number or enter 0 for all (empty exits):'
+        message = 'please select a number or enter 0 for all (empty exits): '
         line = Readline.readline(message, false)
 
         selection = number line
@@ -46,9 +47,10 @@ module Topcgen
           s[:package_root] = settings[:package_root]
           s[:main_imports] = settings[:main_imports]
           s[:test_imports] = settings[:test_imports]
-          problem = { :info => s }
+          problem = {}
+          problem[:info] = s
           problem[:statement] = browser.get_statement s[:statement_link]
-          problem[:tests] = browser.get_solution s[:solution_java]
+          problem[:solution] = browser.get_solution s[:solution_java]
           generate_java_files problem
         end
       end
@@ -59,39 +61,37 @@ module Topcgen
 
   private
 
-  def self.generate_java_files problems
-    problems.each do |p|
-      puts "generating: #{p}"
+  def self.generate_java_files problem
+    puts "generating: #{problem}" # TODO: remove
 
-      info = p[:info]
-      statement = p[:statement]
-      tests = p[:tests]
+    info = problem[:info]
+    statement = problem[:statement]
+    tests = problem[:solution].tests
 
-      method = MethodParser.new(statement[:method], 
-                                statement[:parameters], 
-                                statement[:returns], 
-                                statement[:signature])
-      test_values = tests.map do |t|
-        arg_types = method.parameters.map { |a| a[:type] }
-        ret_types = [ statement[:returns] ]
-        { :arguments  => ValueParser.parse(arg_types, t[:arguments]),
-          :expected   => ValueParser.parse(ret_types, t[:expected]) }
-      end
+    method = MethodParser.new(statement[:method], 
+                              statement[:parameters], 
+                              statement[:returns], 
+                              statement[:signature])
+    test_values = tests.map do |t|
+      arg_types = method.parameters.map { |a| a[:type] }
+      ret_types = [ statement[:returns] ]
+      { :arguments  => ValueParser.parse(arg_types, t[:arguments]),
+        :expected   => ValueParser.parse(ret_types, t[:expected]) }
+    end
 
-      package = Package.new(info[:name], info[:package_root], info[:categories])
+    package = JAVA::Package.new(info[:name], info[:package_root], info[:categories])
 
-      write_file(package.src_file) do |f|
-        JAVA.main_class f, method, info
-      end
-      write_file(package.test_file) do |f|
-        JAVA.test_class f, method, info, test_values
-      end
+    write_file(package.src_file) do |f|
+      JAVA.main_class f, package, method, info
+    end
+    write_file(package.test_file) do |f|
+      JAVA.test_class f, package, method, info, test_values
     end
   end
 
   def self.write_file file
     dir = File.dirname file
-    Dir.mkdir dir unless Dir.exists? dir
+    FileUtils.mkdir_p dir unless Dir.exists? dir
 
     if File.exists? file
       puts "skipped file #{file} (already exists)"

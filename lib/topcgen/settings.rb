@@ -20,7 +20,13 @@ module Topcgen
 
     def self.clean(hash) 
       hash.inject({}) do |memo,(k,v)|
-        memo[k.to_sym] = v.instance_of?(Hash) ? (clean v) : v
+        if v.instance_of?(Hash)
+          memo[k.to_sym] = clean v
+        elsif v.instance_of?(Array)
+          memo[k.to_sym] = v.map { |e| clean e }
+        else
+          memo[k.to_sym] = v
+        end
         memo 
       end
     end

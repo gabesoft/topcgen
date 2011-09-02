@@ -8,3 +8,4 @@ settings.yml
 pkg/*
 tmp/*
 cookies/*
+topc_test/*
