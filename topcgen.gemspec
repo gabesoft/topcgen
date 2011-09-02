@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.homepage      = "http://github.com/gabesoft/topcgen"
   s.summary       = "Top Coder Problems Code Generator"
-  s.description   = ""
+  s.description   = "Generates classes and unit tests for top coder archived problems."
 
   s.rubyforge_project = "topcgen"
 

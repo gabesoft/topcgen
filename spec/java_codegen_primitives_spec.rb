@@ -105,6 +105,20 @@ module Topcgen
           stmt = JAVA.val 'long[]', [ 3, 4, 89, 9 ]
           stmt.to_s.should eq '{ 3L, 4L, 89L, 9L }'
         end
+
+        it "should output a double" do
+          stmt = JAVA.val 'double', -4234.90
+          stmt.to_s.should eq '-4234.9'
+        end
+
+        it "should output an int passed in in a single value array" do
+          stmt = JAVA.val 'int', [439]
+          stmt.to_s.should eq '439'
+        end
+
+        it "should fail to output an int passed in in a multiple value array" do
+          lambda { stmt = JAVA.val 'int', [439, 324] }.should raise_error
+        end
       end
 
       describe CommentGen do

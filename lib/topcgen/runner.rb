@@ -15,14 +15,14 @@ module Topcgen
   $log_file = '.topcgen.log'
   $log = Logger.new($log_file)
 
-  def self.initialize_log
+  def self.initialize_logger
     File.delete $log_file if File.exists? $log_file
     $log = Logger.new($log_file)
     $log.level = Logger::DEBUG
   end
 
   def self.run
-    initialize_log
+    initialize_logger
 
     options = parse_options
     settings = Settings.read_file '.topcgen.yml'
@@ -32,7 +32,7 @@ module Topcgen
     browser = Browser.new
 
     begin
-      puts "running search for class #{options[:class]}"
+      puts "running search for class #{options[:class]} ..."
 
       browser.login settings[:credentials]
       results = browser.search options[:class]
@@ -65,9 +65,10 @@ module Topcgen
           s[:main_imports] = settings[:main_imports]
           s[:test_imports] = settings[:test_imports]
 
-          puts s[:name]
-          puts s[:statement_link_full]
-          puts s[:solution_java]
+          puts "generating files for class #{s[:name]} ..."
+          #puts s[:name]
+          #puts s[:statement_link_full]
+          #puts s[:solution_java]
 
           problem = {}
           problem[:info] = s
@@ -84,8 +85,6 @@ module Topcgen
   private
 
   def self.generate_java_files problem
-    #puts "generating: #{problem}" # TODO: remove
-
     info = problem[:info]
     statement = problem[:statement]
     tests = problem[:solution].tests

@@ -119,12 +119,16 @@ module Topcgen
           @value.to_s
         when 'long'
           "#{@value}L"
+        when 'double'
+          @value.to_s
         when 'String'
           "\"#{@value}\""
         when 'int[]'
           "{ #{@value.join(', ')} }"
         when 'long[]'
           "{ #{@value.map { |v| "#{v}L" }.join(', ')} }"
+        when 'double[]'
+          "{ #{@value.join(', ')} }"
         when 'String[]'
           "{ #{@value.map { |v| "\"#{v}\"" }.join(', ')} }"
         else

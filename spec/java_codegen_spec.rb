@@ -3,7 +3,7 @@ require 'spec_helper'
 module Topcgen
   module JAVA
     describe JAVA do
-      before :each do
+      def initialize_values
         @info = {:name=>"KiloManX", :statement_link=>"/stat?c=problem_statement&pm=2288&rd=4725", 
                  :used_in=>"SRM 181", :used_as=>"Division I Level Three", 
                  :categories=>"Dynamic Programming, Search", :point_value=>"1000", 
@@ -18,11 +18,49 @@ module Topcgen
           {:arguments=>"{\"1542\",\"7935\",\"1139\",\"8882\"},{150,150,150,150}", :expected=>"{ 205 }"},
           {:arguments=>"{\"07\",\"40\"},{150,10}", :expected=>"{ 48 }"}
         ]
-
-        @method = MethodParser.new @stmt[:method], @stmt[:parameters], @stmt[:returns], @stmt[:signature]
       end
 
+      def prepare_values
+        @method = MethodParser.new @stmt[:method], @stmt[:parameters], @stmt[:returns], @stmt[:signature]
+        @values = @tests.map do |t|
+          a_types = @method.parameters.map { |p| p[:type] }
+          r_types = [ @stmt[:returns] ]
+          arguments = ValueParser.parse a_types, t[:arguments]
+          expected = ValueParser.parse r_types, t[:expected]
+          { :arguments => arguments, :expected => expected[0] }
+        end
+      end
+
+      #before :each do
+        #@info = {:name=>"KiloManX", :statement_link=>"/stat?c=problem_statement&pm=2288&rd=4725", 
+                 #:used_in=>"SRM 181", :used_as=>"Division I Level Three", 
+                 #:categories=>"Dynamic Programming, Search", :point_value=>"1000", 
+                 #:solution_java=>"/stat?c=problem_solution&cr=277659&rd=4725&pm=2288", 
+                 #:solution_cpp=>"/stat?c=problem_solution&cr=262936&rd=4725&pm=2288"}
+        #@info[:statement_link_full] = 'http://community.topcoder.com' + @info[:statement_link]
+        #@package = Package.new(@info[:name], 'topc', @info[:categories])
+
+        #@stmt = {:class=>"KiloManX", :method=>"leastShots", :parameters=>"String[], int[]", :returns=>"int[]", :signature=>"int[] leastShots(String[] damageChart, int[] bossHealth)"}
+        #@tests = [
+          #{:arguments=>"{\"070\",\"500\",\"140\"},{150,150,150}", :expected=>"{ 218 }"},
+          #{:arguments=>"{\"1542\",\"7935\",\"1139\",\"8882\"},{150,150,150,150}", :expected=>"{ 205 }"},
+          #{:arguments=>"{\"07\",\"40\"},{150,10}", :expected=>"{ 48 }"}
+        #]
+
+        #@method = MethodParser.new @stmt[:method], @stmt[:parameters], @stmt[:returns], @stmt[:signature]
+        #@values = @tests.map do |t|
+          #a_types = @method.parameters.map { |p| p[:type] }
+          #r_types = [ @stmt[:returns] ]
+          #arguments = ValueParser.parse a_types, t[:arguments]
+          #expected = ValueParser.parse r_types, t[:expected]
+          #{ :arguments => arguments, :expected => expected[0] }
+        #end
+      #end
+
       it "should generate the problem class" do
+        initialize_values
+        prepare_values
+
         @info[:main_imports] = [ 
           { :path => 'java.util' }, 
           { :path => 'java.io' }
@@ -37,14 +75,15 @@ module Topcgen
         stream.close
       end
 
-      it "should generate the unit tests" do
-        values = @tests.map do |t|
-          a_types = @method.parameters.map { |p| p[:type] }
-          r_types = [ @stmt[:returns] ]
-          arguments = ValueParser.parse a_types, t[:arguments]
-          expected = ValueParser.parse r_types, t[:expected]
-          { :arguments => arguments, :expected => expected[0] }
+      it "should generate unit tests for problem that returns a single value" do
+        initialize_values
+        @stmt[:returns] = 'double'
+        @stmt[:signature] = @stmt[:signature].gsub(/^int\[\]/, 'double')
+        @tests.each do |t|
+          t[:expected] = t[:expected].gsub(/\{|\}|\s+/, '')
         end
+
+        prepare_values
 
         @info[:test_imports] = [ 
           { :path => 'junit.framework' },
@@ -53,13 +92,52 @@ module Topcgen
         ]
 
         stream = StringIO.new
-        file = read_file 'spec/files/KiloManXTest.java'
+        file = read_file 'spec/files/KiloManXTestSV.java'
 
-        JAVA.test_class(stream, @package, @method, @info, values)
+        JAVA.test_class(stream, @package, @method, @info, @values)
         stream.string.should eq file
 
         stream.close
       end
+
+      it "should generate the unit tests for problem that returns an array" do
+        initialize_values
+        prepare_values
+
+        @info[:test_imports] = [ 
+          { :path => 'junit.framework' },
+          { :path => 'org.junit', :object => 'Test' },
+          { :path => 'org.junit.Assert', :static => true } 
+        ]
+
+        stream = StringIO.new 
+        file = read_file 'spec/files/KiloManXTestAR.java'
+
+        JAVA.test_class(stream, @package, @method, @info, @values)
+        stream.string.should eq file
+
+        stream.close
+      end
+
+      #it "should generate the unit tests 2" do
+      #stmt = {
+      #:class=>"AverageCandyLifetime",
+      #:method=>"getAverage",
+      #:parameters=>"int[]",
+      #:returns=>"double",
+      #:signature=>"double getAverage(int[] eatenCandies)" }
+      #method = MethodParser.new stmt[:method], stmt[:parameters], stmt[:returns], stmt[:signature]
+      #arguments = ValueParser.parse [ method.parameters[0][:type] ], "{902,0,0,0,0,0,0,0,0,0,0,0}"
+      #expected = ValueParser.parse [ stmt[:returns] ], "31.0"
+
+
+
+      #stream = StringIO.new
+      #expected.gen stream
+      #stream.string.should eq "31.0"
+
+      #stream.close
+      #end
 
       def read_file file
         File.open(file, 'r') do |f|

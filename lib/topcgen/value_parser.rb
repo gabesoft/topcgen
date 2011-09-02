@@ -15,12 +15,16 @@ module Topcgen
         parse_int text
       when 'long'
         parse_long text
+      when 'double'
+        parse_double text
       when 'String[]'
         parse_string_array text
       when 'int[]'
         parse_int_array text
       when 'long[]'
         parse_long_array text
+      when 'double[]'
+        parse_double_array text
       else
         raise "don't know how to parse values of type #{@type}"
       end
@@ -51,6 +55,11 @@ module Topcgen
       parse_text(/^(\d+)(L?,\s*)?/x, text)
       @match = Integer @match
     end
+     
+    def parse_double text
+      parse_text(/^([+\-0-9.]+)(,\s*)?/x, text)
+      @match = Float @match
+    end
 
     def parse_string_array text
       parse_text(/^\{(.+?)\}(,\s*)?/x, text)
@@ -65,6 +74,11 @@ module Topcgen
     def parse_long_array text
       parse_text(/^\{(.+?)\}(,\s*)?/x, text)
       @match = @match.split(/,\s*/).map { |s| Integer s.gsub(/L$?/, "") }
+    end
+
+    def parse_double_array text
+      parse_text(/^{(.+?)\}(,\s*)?/x, text)
+      @match = @match.split(/,\s*/).map { |s| Float s }
     end
 
     def parse_text(pattern, text)

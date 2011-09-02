@@ -27,6 +27,17 @@ module Topcgen
       parser.match_length.should eq 5
     end
 
+    it "should parse double value" do
+      parser = ValueParser.new 'double'
+      parser.parse '-897.32, 89, 32L, "32.23"'
+      parser.match.should eq -897.32
+      parser.match_length.should eq 9
+
+      parser.parse '324.883, 89, 32L, "32.23"'
+      parser.match.should eq 324.883
+      parser.match_length.should eq 9
+    end
+
     it "should parse string array" do
       parser = ValueParser.new 'String[]'
       parser.parse '{"abc", "def","klm","de"}, {234,34,9}, "hello", 34L'
@@ -46,6 +57,13 @@ module Topcgen
       parser.parse '{98L,32, 39809787089797870897098789897L,99, 0}, "abc", {}'
       parser.match.should eq [ 98, 32, 39809787089797870897098789897, 99, 0 ]
       parser.match_length.should eq 48
+    end
+
+    it "should parse double array" do
+      parser = ValueParser.new 'double[]'
+      parser.parse '{4.0, 43.98, +2.8, -0.98, 234, 897.1}, {1,3,4,5}, "test"'
+      parser.match.should eq [ 4, 43.98, 2.8, -0.98, 234, 897.1 ]
+      parser.match_length.should eq 39
     end
 
     it "should parse multiple values" do
