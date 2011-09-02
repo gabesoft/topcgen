@@ -1,6 +1,6 @@
 module Topcgen
   module JAVA
-    class Class
+    class ClassGen
       def initialize(name, fields, methods, comments, visibility)
         @name = name
         @comments = comments
@@ -25,7 +25,7 @@ module Topcgen
       end
     end
 
-    class Method
+    class MethodGen
       def initialize(name, return_type, parameters, statements, annotation, comment, visibility)
         @name = name
         @return_type = return_type
@@ -49,7 +49,7 @@ module Topcgen
       end
     end
 
-    class Return
+    class ReturnGen
       def initialize(value)
         @value = value
       end
@@ -59,7 +59,7 @@ module Topcgen
       end
     end
 
-    class FunCall
+    class FunCallGen
       def initialize(name, args)
         @name = name
         @args = args
@@ -74,7 +74,7 @@ module Topcgen
       end
     end
 
-    class NewArray
+    class NewArrayGen
       def initialize(type, value, length)
         @type = type
         @value = value
@@ -89,7 +89,7 @@ module Topcgen
         "new #{@type}[#{@value.nil? ? @length : ''}]#{@value.nil? ? '' : ' ' + @value.to_s}"
       end
     end
-    class New
+    class NewGen
       def initialize(type)
         @type = type
       end
@@ -103,7 +103,7 @@ module Topcgen
       end
     end
 
-    class Value
+    class ValueGen
       def initialize(type, value)
         @value = value
         @type = type
@@ -133,7 +133,7 @@ module Topcgen
       end
     end
 
-    class Variable
+    class VariableGen
       def initialize(type, name, value=nil)
         @name = name
         @type = type
@@ -145,7 +145,7 @@ module Topcgen
       end
     end
 
-    class Package
+    class PackageGen
       def initialize path
         @path = path
       end
@@ -155,7 +155,7 @@ module Topcgen
       end
     end
 
-    class Import
+    class ImportGen
       def initialize(path, object, static)
         @path = path
         @object = object
@@ -167,7 +167,7 @@ module Topcgen
       end
     end
 
-    class Comment
+    class CommentGen
       def initialize text
         @text = text
       end
@@ -177,7 +177,7 @@ module Topcgen
       end
     end
 
-    class Annotation
+    class AnnotationGen
       def initialize text
         @text = text
       end
@@ -191,13 +191,13 @@ module Topcgen
       end
     end
 
-    class Blank
+    class BlankGen
       def gen(stream, tab_count=0)
         stream.puts ''
       end
     end
 
-    class Multiple
+    class MultipleGen
       def initialize statements
         @statements = statements
       end

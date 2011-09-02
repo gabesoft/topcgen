@@ -2,140 +2,87 @@ require 'spec_helper'
 
 module Topcgen
   module JAVA
-    describe 'All' do
+    describe Package do
+      it "should should generate packaging information" do
+        package = Package.new('KiloManX', 'top.coder', 'Dynamic Programming, Search, Recursion')
+        package.main_package.should eq 'top.coder.dynamic'
+        package.test_package.should eq 'top.coder.test.dynamic'
+        package.main_class_name.should eq 'KiloManX'
+        package.test_class_name.should eq 'KiloManXTest'
+        package.src_folder.should eq 'src/dynamic'
+        package.src_file.should eq 'src/dynamic/KiloManX.java'
+        package.test_folder.should eq 'test/dynamic'
+        package.test_file.should eq 'test/dynamic/KiloManXTest.java'
+      end
+    end
+
+    describe JAVA do
       before :each do
-        @stream = StringIO.new
+        @info = {:name=>"KiloManX", :statement_link=>"/stat?c=problem_statement&pm=2288&rd=4725", 
+                 :used_in=>"SRM 181", :used_as=>"Division I Level Three", 
+                 :categories=>"Dynamic Programming, Search", :point_value=>"1000", 
+                 :solution_java=>"/stat?c=problem_solution&cr=277659&rd=4725&pm=2288", 
+                 :solution_cpp=>"/stat?c=problem_solution&cr=262936&rd=4725&pm=2288"}
+        @info[:statement_link_full] = 'http://community.topcoder.com' + @info[:statement_link]
+        @package = Package.new(@info[:name], 'topc', @info[:categories])
+
+        @stmt = {:class=>"KiloManX", :method=>"leastShots", :parameters=>"String[], int[]", :returns=>"int[]", :signature=>"int[] leastShots(String[] damageChart, int[] bossHealth)"}
+        @tests = [
+          {:arguments=>"{\"070\",\"500\",\"140\"},{150,150,150}", :expected=>"{ 218 }"},
+          {:arguments=>"{\"1542\",\"7935\",\"1139\",\"8882\"},{150,150,150,150}", :expected=>"{ 205 }"},
+          {:arguments=>"{\"07\",\"40\"},{150,10}", :expected=>"{ 48 }"}
+        ]
+
+        @method = MethodParser.new @stmt[:method], @stmt[:parameters], @stmt[:returns], @stmt[:signature]
       end
 
-      describe Class do
-        it "should output class" do
-          method = JAVA.method 'foo', 'int', [], [ (JAVA.ret (JAVA.default 'int')) ], (JAVA.annotation 'test')
-          afield = JAVA.var 'int', 'a', 0
-          clas = JAVA.clas 'Kiloman', [ afield ], [ method ], [ (JAVA.comment 'SRM 234 Div 2 - 1000') ]
-          clas.gen @stream
-          @stream.string.should eq "// SRM 234 Div 2 - 1000\npublic class Kiloman {\n  int a = 0;\n\n  @test\n  public int foo() {\n    return 0;\n  }\n}\n"
-        end
+      it "should generate the problem class" do
+        @info[:main_imports] = [ 
+          { :path => 'java.util' }, 
+          { :path => 'java.io' }
+        ]
+
+        stream = StringIO.new
+        file = read_file 'spec/files/KiloManX.java'
+
+        JAVA.main_class(stream, @package, @method, @info)
+        stream.string.should eq file
+
+        stream.close
       end
 
-      describe Method do
-        it "should output method" do
-          stmt = JAVA.method('foo', 'int', 
-                             [ { :name => 'a', :type => 'long' }, { :name => 'b', :type => 'String' } ], 
-                             [ (JAVA.var 'int[]', 'x', (JAVA.arr 'int', [4, 5])), (JAVA.ret (JAVA.val 'int', 0)) ])
-          stmt.gen @stream
-          @stream.string.should eq "public int foo(long a, String b) {\n  int[] x = new int[] { 4, 5 };\n  return 0;\n}\n"
+      it "should generate the unit tests" do
+        values = @tests.map do |t|
+          a_types = @method.parameters.map { |p| p[:type] }
+          r_types = [ @stmt[:returns] ]
+          arguments = ValueParser.parse a_types, t[:arguments]
+          expected = ValueParser.parse r_types, t[:expected]
+          { :arguments => arguments, :expected => expected[0] }
         end
+
+        @info[:test_imports] = [ 
+          { :path => 'junit.framework' },
+          { :path => 'org.junit', :object => 'Test' },
+          { :path => 'org.junit.Assert', :static => true } 
+        ]
+
+        stream = StringIO.new
+        file = read_file 'spec/files/KiloManXTest.java'
+
+        JAVA.test_class(stream, @package, @method, @info, values)
+        stream.string.should eq file
+
+        stream.close
       end
 
-      describe Return do
-        it "should output return statement" do
-          stmt = JAVA.ret (JAVA.val 'long', 45)
-          stmt.gen @stream
-          @stream.string.should eq "return 45L;\n"
-        end
-
-        it "should output return null statement" do
-          stmt = JAVA.ret (JAVA.default 'int[]')
-          stmt.gen @stream
-          @stream.string.should eq "return null;\n"
-        end
-      end
-
-      describe FunCall do
-        it "should output function call" do
-          stmt = JAVA.call 'foo', (JAVA.call 'bar', (JAVA.val 'String', 'a')), (JAVA.val 'long', 45), 'b'
-          stmt.to_s.should eq 'foo(bar("a"), 45L, b)'
-        end
-
-        it "should output function call with array parameter" do
-          stmt = JAVA.call 'foo', 
-            (JAVA.arr 'int', [2,4,5]), 
-            (JAVA.arr 'String', (JAVA.val 'String[]', ["a","b"])), 
-            (JAVA.val 'long', 5)
-          stmt.to_s.should eq 'foo(new int[] { 2, 4, 5 }, new String[] { "a", "b" }, 5L)'
-        end
-      end
-
-      describe NewArray do
-        it "should output array initialized by length" do
-          stmt = JAVA.arr 'int', nil, 23
-          stmt.to_s.should eq 'new int[23]'
-        end
-
-        it "should output array initialized by value" do
-          stmt = JAVA.arr 'long', (JAVA.val 'long[]', [4,4,8])
-          stmt.to_s.should eq 'new long[] { 4L, 4L, 8L }'
-        end
-      end
-
-      describe New do
-        it "should output constructor" do
-          stmt = JAVA.ctor 'MyObject'
-          stmt.to_s.should eq 'new MyObject()'
-        end
-      end
-
-      describe Variable do
-        it "should output variable declaration" do
-          stmt = JAVA.var 'String', 'a'
-          stmt.gen @stream
-          @stream.string.should eq "String a;\n"
-        end
-
-        it "should output variable declaration and initialization" do
-          stmt = JAVA.var 'int[]', 'a', (JAVA.val 'int[]', [ 1, 2, 4 ])
-          stmt.gen @stream
-          @stream.string.should eq "int[] a = { 1, 2, 4 };\n"
-        end
-
-        it "should output variable declaration and initialization with new array" do
-          stmt = JAVA.var 'int[]', 'a', (JAVA.arr 'int', (JAVA.val 'int[]', [4,5,9,9]))
-          stmt.gen @stream
-          @stream.string.should eq "int[] a = new int[] { 4, 5, 9, 9 };\n"
-        end
-      end
-
-      describe Value do
-        it "should output a string array" do
-          stmt = JAVA.val 'String[]', [ "ab", "cd", "e", "f" ]
-          stmt.to_s.should eq '{ "ab", "cd", "e", "f" }'
-        end
-
-        it "should output a long array" do
-          stmt = JAVA.val 'long[]', [ 3, 4, 89, 9 ]
-          stmt.to_s.should eq '{ 3L, 4L, 89L, 9L }'
-        end
-      end
-
-      describe Comment do
-        it "should output comment line" do
-          stmt = JAVA.comment 'this is a comment'
-          stmt.gen @stream
-          @stream.string.should eq "// this is a comment\n"
-        end
-      end
-
-      describe Package do
-        it "should output the package declaration" do
-          stmt = JAVA.pkg 'topc.test.graph'
-          stmt.gen @stream, 3
-          @stream.string.should eq "      package topc.test.graph;\n"
-        end
-      end
-
-      describe Import do
-        it "should output an import declaration" do
-          stmt = JAVA.import 'org.junit.Assert'
-          stmt.gen @stream
-          @stream.string.should eq "import org.junit.Assert.*;\n"
-        end      
-
-        it "should output a static import declaration" do
-          stmt = JAVA.import 'org.junit.Assert', '*', true
-          stmt.gen @stream
-          @stream.string.should eq "import static org.junit.Assert.*;\n"
+      def read_file file
+        File.open(file, 'r') do |f|
+          f.rewind
+          f.read
         end
       end
     end
+
   end
 end
+

@@ -28,11 +28,11 @@ module Topcgen
           puts "#{i + 1}: #{v[:name]} #{v[:used_in]} #{v[:point_value]}"
         end
 
-        message = 'please select an number or enter 0 for all (empty exits):'
+        message = 'please select a number or enter 0 for all (empty exits):'
         line = Readline.readline(message, false)
 
         selection = number line
-        if !selection.nil? && selection >= 00 && selection < results.length
+        if !selection.nil? && selection >= 0 && selection <= results.length
           selected = selection == 0 ? results : [ results[selection - 1] ]
         else
           puts 'invalid selection ... exiting'
@@ -58,7 +58,7 @@ module Topcgen
   end
 
   private
-  
+
   def self.generate_java_files problems
     problems.each do |p|
       puts "generating: #{p}"
@@ -77,31 +77,65 @@ module Topcgen
         { :arguments  => ValueParser.parse(arg_types, t[:arguments]),
           :expected   => ValueParser.parse(ret_types, t[:expected]) }
       end
-     
-      #paths = JAVA.get_paths
+
+      package = Package.new(info[:name], info[:package_root], info[:categories])
+
+      #paths = JAVA.get_paths : need a better name
       #paths[:src_folder]
       #paths[:src_file]
       #paths[:test_folder]
       #paths[:test_file]
       #paths[:main_class_name]
       #paths[:test_class_name]
-      
-      src_folder = 'src'      # TODO: get main package
-      src_file = "#{info[:name]}.java"
-      
-      test_folder = 'test'    # TODO: get test package
-      test_file = "#{info[:name]}Test.java"
-      
-      File.open(src_file, 'w') do |f|
-        f.rewind
+      #paths[:main_package]
+      #paths[:test_package]
+
+      #src_folder = 'src'      # TODO: get main package
+      #src_file = "#{info[:name]}.java"
+
+      #test_folder = 'test'    # TODO: get test package
+      #test_file = "#{info[:name]}Test.java"
+
+      #Dir.mkdir package.src_folder  unless Dir.exists? package.src_folder
+      #Dir.mkdir package.test_folder unless Dir.exists? package.test_folder
+
+      write_file(package.src_file) do |f|
         JAVA.main_class f, method, info
       end
-
-      File.open(test_file, 'w') do |f|
-        f.rewind
+      write_file(package.test_file) do |f|
         JAVA.test_class f, method, info, test_values
       end
 
+      #if File.exists? package.src_file
+      #puts "skipped file #{package.src_file} (already exists)"
+      #else
+      #File.open(package.src_file, 'w') do |f|
+      #f.rewind
+      #JAVA.main_class f, method, info
+      #end
+      #puts "created file #{package.src_file}"
+      #end
+
+      #File.open(package.test_file, 'w') do |f|
+      #f.rewind
+      #JAVA.test_class f, method, info, test_values
+      #end
+
+    end
+  end
+
+  def write_file file
+    dir = File.dirname file
+    Dir.mkdir dir unless Dir.exists? dir
+
+    if File.exists? file
+      puts "skipped file #{file} (already exists)"
+    else
+      File.open(file, 'w') do |f|
+        f.rewind
+        yield f
+      end
+      puts "created file #{file}"
     end
   end
 
