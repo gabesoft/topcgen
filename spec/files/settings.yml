@@ -1,5 +1,18 @@
 credentials: 
   user: auser
   pass: apass
-namespace_root: aroot
-
+package_root: aroot
+main_imports:
+  - 
+    path: java.util
+  - 
+    path: java.io
+test_imports:
+  -
+    path: junit.framework
+  -
+    path: org.junit
+    object: Test
+  -
+    path: org.junit.Assert
+    static: true

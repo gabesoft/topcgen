@@ -23,7 +23,7 @@ module Topcgen
       end
 
       it "should generate the problem class" do
-        @info[:imports] = [ 
+        @info[:main_imports] = [ 
           { :path => 'java.util' }, 
           { :path => 'java.io' }
         ]
@@ -31,7 +31,7 @@ module Topcgen
         stream = StringIO.new
         file = read_file 'spec/files/KiloManX.java'
 
-        JAVA.problem_class(stream, @method, @info)
+        JAVA.main_class(stream, @method, @info)
         stream.string.should eq file
 
         stream.close
@@ -46,7 +46,7 @@ module Topcgen
           { :arguments => arguments, :expected => expected[0] }
         end
         
-        @info[:imports] = [ 
+        @info[:test_imports] = [ 
           { :path => 'junit.framework' },
           { :path => 'org.junit', :object => 'Test' },
           { :path => 'org.junit.Assert', :static => true } 
@@ -55,7 +55,7 @@ module Topcgen
         stream = StringIO.new
         file = read_file 'spec/files/KiloManXTest.java'
 
-        JAVA.problem_tests(stream, @method, @info, values)
+        JAVA.test_class(stream, @method, @info, values)
         stream.string.should eq file
 
         stream.close

@@ -1,15 +1,19 @@
 module Topcgen
   module JAVA
-    def self.problem_class(stream, method_def, info)
-      gen_package(stream, info[:package_root], info[:categories])
-      gen_imports(stream, info[:imports])
+    def self.main_class(stream, method_def, info)
+      gen_main_package(stream, info[:package_root], info[:categories])
+      gen_main_imports(stream, info[:main_imports])
       gen_main_class(stream, method_def, info)
     end
 
-    def self.problem_tests(stream, method_def, info, tests)
+    def self.test_class(stream, method_def, info, tests)
       gen_test_package(stream, info[:package_root], info[:categories])
-      gen_test_imports(stream, info[:imports], info[:package_root], info[:categories])
+      gen_test_imports(stream, info[:test_imports], info[:package_root], info[:categories])
       gen_test_class(stream, method_def, info, tests)
+    end
+
+    def self.get_paths(method_def, info)
+      {} # TODO: add unit tests first
     end
 
     private
@@ -56,11 +60,19 @@ module Topcgen
       test_class.gen stream
     end
 
+    def self.gen_main_package(stream, package_root, categories)
+      gen_package stream, package_root, categories
+    end
+
     def self.gen_package(stream, package_root, categories)
       package_path = get_package package_root, categories
       package_gen = pkg package_path
       package_gen.gen stream
       newline.gen stream
+    end
+
+    def self.gen_main_imports(stream, imports)
+      gen_imports stream, imports
     end
 
     def self.gen_imports(stream, imports)
