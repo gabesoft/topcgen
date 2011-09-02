@@ -6,12 +6,24 @@ require 'pp'
 require 'json'
 require 'readline'
 require 'fileutils'
+require 'logger'
 
 # TODO: see file in topc_test/src/math/Islands.java
 #       see error when selecting 0 on -c island
 
 module Topcgen
+  $log_file = '.topcgen.log'
+  $log = Logger.new($log_file)
+
+  def self.initialize_log
+    File.delete $log_file if File.exists? $log_file
+    $log = Logger.new($log_file)
+    $log.level = Logger::DEBUG
+  end
+
   def self.run
+    initialize_log
+
     options = parse_options
     settings = Settings.read_file '.topcgen.yml'
     settings[:credentials] = {} if settings[:credentials].nil?
@@ -20,6 +32,8 @@ module Topcgen
     browser = Browser.new
 
     begin
+      puts "running search for class #{options[:class]}"
+
       browser.login settings[:credentials]
       results = browser.search options[:class]
       selected = []
@@ -145,19 +159,12 @@ module Topcgen
 
     begin
       parser.parse!
-
+      options[:class] = ARGV[0] if options[:class].nil? && ARGV.length > 0
       raise OptionParser::MissingArgument.new '--class' if options[:class].nil?
-
-      # TODO: put a better message here
-      # 
-      puts 'options detected'
-      puts '----------------'
-      pp options
-      puts '----------------'
-
       options
     rescue OptionParser::MissingArgument => err
       puts err
+      puts parser
       exit
     rescue OptionParser::InvalidOption
       puts parser

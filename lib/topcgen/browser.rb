@@ -22,15 +22,21 @@ module Topcgen
       do_login credentials
       response = go_home
       @logged_in = login_successfull response
+
+      $log.info "login for user #{credentials[:user]} #{@logged_in ? 'succeeded' : 'failed'}"
     end
 
     def logout
       do_logout
       response = go_home
       @logged_in = login_successfull response
+
+      $log.info 'user logged out'
     end
 
     def search(class_name)
+      $log.info "searching for class #{class_name}"
+
       query = get_search_params class_name
       url = get_uri :ProblemArchive, query
       response = http_get url
@@ -112,12 +118,14 @@ module Topcgen
     end
 
     def http_get url
+      $log.info "HTTP GET: #{url}"
       response = HTTP.get(url, @cookies)
       update_cookies response
       response 
     end
 
     def http_post(url, params)      
+      $log.info "HTTP POST: #{url}"
       response = HTTP.post(url, @cookies, params)
       update_cookies response
       response
