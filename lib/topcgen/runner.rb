@@ -7,6 +7,9 @@ require 'json'
 require 'readline'
 require 'fileutils'
 
+# TODO: see file in topc_test/src/math/Islands.java
+#       see error when selecting 0 on -c island
+
 module Topcgen
   def self.run
     options = parse_options
@@ -47,6 +50,11 @@ module Topcgen
           s[:package_root] = settings[:package_root]
           s[:main_imports] = settings[:main_imports]
           s[:test_imports] = settings[:test_imports]
+
+          puts s[:name]
+          puts s[:statement_link_full]
+          puts s[:solution_java]
+
           problem = {}
           problem[:info] = s
           problem[:statement] = browser.get_statement s[:statement_link]
@@ -62,7 +70,7 @@ module Topcgen
   private
 
   def self.generate_java_files problem
-    puts "generating: #{problem}" # TODO: remove
+    #puts "generating: #{problem}" # TODO: remove
 
     info = problem[:info]
     statement = problem[:statement]
@@ -140,6 +148,8 @@ module Topcgen
 
       raise OptionParser::MissingArgument.new '--class' if options[:class].nil?
 
+      # TODO: put a better message here
+      # 
       puts 'options detected'
       puts '----------------'
       pp options

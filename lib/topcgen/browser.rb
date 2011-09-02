@@ -48,6 +48,8 @@ module Topcgen
     end
 
     def get_solution link
+      # TODO: try to get the tests from the solution
+      #       on failure get them from the problem statement
       url = get_uri(nil, nil, link)
       response = http_get url
       ProblemSolution.new response.body

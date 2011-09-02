@@ -1,4 +1,3 @@
-
 module Topcgen
   class Settings
     def self.read_file(file)
