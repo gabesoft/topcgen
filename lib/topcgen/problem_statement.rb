@@ -6,14 +6,13 @@ module Topcgen
     def initialize html
       begin
         doc = Hpricot.parse html
-        container = doc/'td.problemText'
+        container = find_container doc
 
-        definition = (container/'tr').find { |tr| tr.inner_html.include? 'Class:' }/'table'
-        class_definition = (definition/'tr').find { |tr| tr.inner_html.include? 'Class:' }
-        method_definition = (definition/'tr').find { |tr| tr.inner_html.include? 'Method:' }
-        parameters_definition = (definition/'tr').find { |tr| tr.inner_html.include? 'Parameters:' }
-        returns_definition = (definition/'tr').find { |tr| tr.inner_html.include? 'Returns:' }
-        signature_definition = (definition/'tr').find { |tr| tr.inner_html.include? 'Method signature:' }
+        class_definition = (container/'tr').find { |tr| tr.inner_html.include? 'Class:' }
+        method_definition = (container/'tr').find { |tr| tr.inner_html.include? 'Method:' }
+        parameters_definition = (container/'tr').find { |tr| tr.inner_html.include? 'Parameters:' }
+        returns_definition = (container/'tr').find { |tr| tr.inner_html.include? 'Returns:' }
+        signature_definition = (container/'tr').find { |tr| tr.inner_html.include? 'Method signature:' }
 
         @data = {}
         @data[:class] = safe_html (class_definition/'td')[1].inner_html
@@ -33,6 +32,21 @@ module Topcgen
     end
 
     private
+
+    def find_container doc
+      continue = true
+      labels = [ 'Class:', 'Method:', 'Returns:' ]
+      container = (doc/'table').find { |t| labels.all? { |s| t.inner_html.include? s } }
+
+      temp = nil
+      while continue
+       temp = (container/'table').find { |t| labels.all? { |s| t.inner_html.include? s } } 
+       container = temp unless temp.nil?
+       continue = !!temp
+      end
+
+      container
+    end
 
     def safe_html html
       html.strip 

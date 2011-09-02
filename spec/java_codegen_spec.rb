@@ -119,26 +119,6 @@ module Topcgen
         stream.close
       end
 
-      #it "should generate the unit tests 2" do
-      #stmt = {
-      #:class=>"AverageCandyLifetime",
-      #:method=>"getAverage",
-      #:parameters=>"int[]",
-      #:returns=>"double",
-      #:signature=>"double getAverage(int[] eatenCandies)" }
-      #method = MethodParser.new stmt[:method], stmt[:parameters], stmt[:returns], stmt[:signature]
-      #arguments = ValueParser.parse [ method.parameters[0][:type] ], "{902,0,0,0,0,0,0,0,0,0,0,0}"
-      #expected = ValueParser.parse [ stmt[:returns] ], "31.0"
-
-
-
-      #stream = StringIO.new
-      #expected.gen stream
-      #stream.string.should eq "31.0"
-
-      #stream.close
-      #end
-
       def read_file file
         File.open(file, 'r') do |f|
           f.rewind
