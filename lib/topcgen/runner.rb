@@ -80,51 +80,16 @@ module Topcgen
 
       package = Package.new(info[:name], info[:package_root], info[:categories])
 
-      #paths = JAVA.get_paths : need a better name
-      #paths[:src_folder]
-      #paths[:src_file]
-      #paths[:test_folder]
-      #paths[:test_file]
-      #paths[:main_class_name]
-      #paths[:test_class_name]
-      #paths[:main_package]
-      #paths[:test_package]
-
-      #src_folder = 'src'      # TODO: get main package
-      #src_file = "#{info[:name]}.java"
-
-      #test_folder = 'test'    # TODO: get test package
-      #test_file = "#{info[:name]}Test.java"
-
-      #Dir.mkdir package.src_folder  unless Dir.exists? package.src_folder
-      #Dir.mkdir package.test_folder unless Dir.exists? package.test_folder
-
       write_file(package.src_file) do |f|
         JAVA.main_class f, method, info
       end
       write_file(package.test_file) do |f|
         JAVA.test_class f, method, info, test_values
       end
-
-      #if File.exists? package.src_file
-      #puts "skipped file #{package.src_file} (already exists)"
-      #else
-      #File.open(package.src_file, 'w') do |f|
-      #f.rewind
-      #JAVA.main_class f, method, info
-      #end
-      #puts "created file #{package.src_file}"
-      #end
-
-      #File.open(package.test_file, 'w') do |f|
-      #f.rewind
-      #JAVA.test_class f, method, info, test_values
-      #end
-
     end
   end
 
-  def write_file file
+  def self.write_file file
     dir = File.dirname file
     Dir.mkdir dir unless Dir.exists? dir
 
