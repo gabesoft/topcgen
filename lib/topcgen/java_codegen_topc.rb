@@ -3,7 +3,7 @@ module Topcgen
     def self.problem_class(stream, method_def, info)
       gen_package(stream, info[:package_root], info[:categories])
       gen_imports(stream, info[:imports])
-      gen_class(stream, method_def, info)
+      gen_main_class(stream, method_def, info)
     end
 
     def self.problem_tests(stream, method_def, info, tests)
@@ -58,30 +58,31 @@ module Topcgen
 
     def self.gen_package(stream, package_root, categories)
       package_path = get_package package_root, categories
-      pkg_gen = pkg package_path
-      pkg_gen.gen stream
+      package_gen = pkg package_path
+      package_gen.gen stream
       newline.gen stream
     end
 
     def self.gen_imports(stream, imports)
       imports.each do |i|
-        import(i[:path], i[:object], i[:static]).gen stream
+        import_gen = import i[:path], i[:object], i[:static]
+        import_gen.gen stream
       end
       newline.gen stream if imports.length > 0;
     end
 
-    def self.gen_class(stream, method_def, info)
+    def self.gen_main_class(stream, method_def, info)
       comments = [
         comment(info[:used_in] + ' ' + info[:used_as] + ' - ' + info[:point_value]),
         comment(info[:categories].downcase),
-        comment(info[:statement_link_full])
-      ]
+        comment(info[:statement_link_full]) ]
 
-      ret_statement = ret (default method_def.return_type)
-      dbg_method = get_debug_method
-      main_method = method(method_def.name, method_def.return_type, method_def.parameters, [ ret_statement ])
+      return_type = method_def.return_type
+      return_statement = ret (default return_type)
+      main_method = method(method_def.name, return_type, method_def.parameters, [ return_statement ])
+      debug_method = get_debug_method
       
-      class_gen = clas(info[:name], nil, [ main_method, newline, dbg_method ], comments)
+      class_gen = clas(info[:name], nil, [ main_method, newline, debug_method ], comments)
       class_gen.gen stream
     end
 
