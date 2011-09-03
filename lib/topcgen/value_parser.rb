@@ -8,26 +8,54 @@ module Topcgen
     end
 
     def parse text
-      case @type
-      when 'String'
-        parse_string text
-      when 'int'
-        parse_int text
-      when 'long'
-        parse_long text
-      when 'double'
-        parse_double text
-      when 'String[]'
-        parse_string_array text
-      when 'int[]'
-        parse_int_array text
-      when 'long[]'
-        parse_long_array text
-      when 'double[]'
-        parse_double_array text
-      else
-        raise "don't know how to parse values of type #{@type}"
+      Safe.run("failed to parse a value of type #{@type} from '#{text}'") do
+        case @type
+        when 'String'
+          parse_string text
+        when 'int'
+          parse_int text
+        when 'long'
+          parse_long text
+        when 'double'
+          parse_double text
+        when 'String[]'
+          parse_string_array text
+        when 'int[]'
+          parse_int_array text
+        when 'long[]'
+          parse_long_array text
+        when 'double[]'
+          parse_double_array text
+        else
+          raise "don't know how to parse values of type #{@type}"
+        end
       end
+
+      #begin
+        #case @type
+        #when 'String'
+          #parse_string text
+        #when 'int'
+          #parse_int text
+        #when 'long'
+          #parse_long text
+        #when 'double'
+          #parse_double text
+        #when 'String[]'
+          #parse_string_array text
+        #when 'int[]'
+          #parse_int_array text
+        #when 'long[]'
+          #parse_long_array text
+        #when 'double[]'
+          #parse_double_array text
+        #else
+          #raise "don't know how to parse values of type #{@type}"
+        #end
+      #rescue Exception => e
+        #$log.error "failed to parse a value of type #{@type} from '#{text}'"
+        #raise e
+      #end
     end
 
     def self.parse(types, values)
@@ -47,15 +75,15 @@ module Topcgen
     end
 
     def parse_int text
-      parse_text(/^(\d+)(,\s*)?/x, text)
+      parse_text(/^([+\-0-9]+)(,\s*)?/x, text)
       @match = Integer @match
     end
 
     def parse_long text
-      parse_text(/^(\d+)(L?,\s*)?/x, text)
+      parse_text(/^([+\-0-9]+)(L?,\s*)?/x, text)
       @match = Integer @match
     end
-     
+
     def parse_double text
       parse_text(/^([+\-0-9.]+)(,\s*)?/x, text)
       @match = Float @match

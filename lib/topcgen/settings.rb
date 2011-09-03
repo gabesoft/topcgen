@@ -12,17 +12,17 @@ module Topcgen
 
     def self.read(stream)
       stream.rewind
-      clean(YAML::load stream.read)
+      sym_keys(YAML::load stream.read)
     end
 
     private
 
-    def self.clean(hash) 
+    def self.sym_keys(hash) 
       hash.inject({}) do |memo,(k,v)|
         if v.instance_of?(Hash)
-          memo[k.to_sym] = clean v
+          memo[k.to_sym] = sym_keys v
         elsif v.instance_of?(Array)
-          memo[k.to_sym] = v.map { |e| clean e }
+          memo[k.to_sym] = v.map { |e| sym_keys e }
         else
           memo[k.to_sym] = v
         end

@@ -16,6 +16,13 @@ module Topcgen
       parser.match_length.should eq 5
     end
 
+    it "should parse negative int value" do
+      parser = ValueParser.new 'int'
+      parser.parse '-902, "test", [32, 34, 09], 32L'
+      parser.match.should eq -902
+      parser.match_length.should eq 6
+    end
+
     it "should parse long value" do
       parser = ValueParser.new 'long'
       parser.parse '902L, "test", [32, 34, 09], 32L'

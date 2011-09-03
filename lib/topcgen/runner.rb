@@ -8,12 +8,9 @@ require 'readline'
 require 'fileutils'
 require 'logger'
 
-# TODO: see file in topc_test/src/math/Islands.java
-#       see error when selecting 0 on -c island
-
 module Topcgen
   $log_file = '.topcgen.log'
-  $log = Logger.new($log_file)
+  $log = Logger.new($log_file, 1, 10240)
 
   def self.initialize_logger
     File.delete $log_file if File.exists? $log_file
@@ -67,11 +64,13 @@ module Topcgen
 
           puts "generating files for class #{s[:name]} ..."
 
-          problem = {}
-          problem[:info] = s
-          problem[:statement] = browser.get_statement s[:statement_link]
-          problem[:solution] = browser.get_solution s[:solution_java]
-          generate_java_files(problem, options)
+          Safe.run "failed to generate files see #{$log_file} for details" do
+            problem = {}
+            problem[:info] = s
+            problem[:statement] = browser.get_statement s[:statement_link]
+            problem[:solution] = browser.get_solution s[:solution_java]
+            generate_java_files(problem, options)
+          end
         end
       end
     ensure
@@ -111,7 +110,8 @@ module Topcgen
     dir = File.dirname file
     FileUtils.mkdir_p dir unless Dir.exists? dir
 
-    if (File.exists? file) && (!options[:force])
+    exists = File.exists? file
+    if exists && !options[:force]
       puts "skipped file #{file} (already exists)"
     else
       File.open(file, 'w') do |f|

@@ -5,6 +5,7 @@ NERD_tree_*
 settings.yml
 .topcgen.yml
 *.log
+*.log.*
 pkg/*
 tmp/*
 cookies/*
