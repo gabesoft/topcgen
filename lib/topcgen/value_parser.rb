@@ -64,29 +64,31 @@ module Topcgen
     end
 
     def parse_string_array text
-      parse_text(/^\{(.+?)\}(,\s*)?/x, text)
+      parse_text(/^\{([^}{]+?)?\}(,\s*)?/x, text)
       @match = @match.split(/,\s*/).map { |s| s.gsub(/^"|"$/, "") }
     end
 
     def parse_int_array text
-      parse_text(/^\{(.+?)\}(,\s*)?/x, text)
+      parse_text(/^\{([+\-0-9,\s]+?)?\}(,\s*)?/x, text)
       @match = @match.split(/,\s*/).map { |s| Integer s }
     end
 
     def parse_long_array text
-      parse_text(/^\{(.+?)\}(,\s*)?/x, text)
+      parse_text(/^\{([+\-0-9L,\s]+?)?\}(,\s*)?/x, text)
       @match = @match.split(/,\s*/).map { |s| Integer s.gsub(/L$?/, "") }
     end
 
     def parse_double_array text
-      parse_text(/^{(.+?)\}(,\s*)?/x, text)
+      parse_text(/^\{([+\-0-9.,\s]+?)?\}(,\s*)?/x, text)
       @match = @match.split(/,\s*/).map { |s| Float s }
     end
 
     def parse_text(pattern, text)
       match = pattern.match text
-      @match = match[1]
-      @match_length = match[0].length
+      @match = match[1]               if match && match.length > 1
+      @match_length = match[0].length if match && match.length > 0
+      @match = ''                     if @match.nil?
+      @match_length = 0               if @match_length.nil?
     end
   end
 end

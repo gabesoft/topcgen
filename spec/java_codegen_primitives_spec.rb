@@ -62,9 +62,14 @@ module Topcgen
           stmt.to_s.should eq 'new int[23]'
         end
 
-        it "should output array initialized by value" do
+        it "should output long array initialized by value" do
           stmt = JAVA.arr 'long', (JAVA.val 'long[]', [4,4,8])
           stmt.to_s.should eq 'new long[] { 4L, 4L, 8L }'
+        end
+
+        it "should output string array initialized by value" do
+          stmt = JAVA.arr 'String[]', [ "BBBAB", "NO PAGE", "AABAB", "BBBBB", "NO PAGE" ]
+          stmt.to_s.should eq 'new String[] { "BBBAB", "NO PAGE", "AABAB", "BBBBB", "NO PAGE" }'
         end
       end
 
@@ -111,13 +116,12 @@ module Topcgen
           stmt.to_s.should eq '-4234.9'
         end
 
-        it "should output an int passed in in a single value array" do
-          stmt = JAVA.val 'int', [439]
-          stmt.to_s.should eq '439'
+        it "should fail to output an int passed in in a single value array" do
+          lambda { JAVA.val 'int', [439] }.should raise_error
         end
 
         it "should fail to output an int passed in in a multiple value array" do
-          lambda { stmt = JAVA.val 'int', [439, 324] }.should raise_error
+          lambda { JAVA.val 'int', [439, 324] }.should raise_error
         end
       end
 

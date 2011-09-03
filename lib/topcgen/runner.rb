@@ -66,7 +66,7 @@ module Topcgen
           s[:main_imports] = settings[:main_imports]
           s[:test_imports] = settings[:test_imports]
 
-          $log.info "generating files for class #{s[:name]} ..."
+          puts "generating files for class #{s[:name]} ..."
 
           begin
             problem               = {}
@@ -76,9 +76,9 @@ module Topcgen
 
             generate_java_files(problem, options)
           rescue Exception => e
-            $log.error "failed to generate files see #{$log_file} for details" 
             $log.error e.message
             $log.error e.backtrace.join("\n\t")
+            puts "failed to generate files see #{$log_file} for details" 
           end
         end
       end
@@ -116,7 +116,7 @@ module Topcgen
       arg_types = method.parameters.map { |a| a[:type] }
       ret_types = [ statement[:returns] ]
       { :arguments  => ValueParser.parse(arg_types, t[:arguments]),
-        :expected   => ValueParser.parse(ret_types, t[:expected]) }
+        :expected   => ValueParser.parse(ret_types, t[:expected])[0] }
     end
 
     package = JAVA::Package.new(info[:name], info[:package_root], info[:categories])

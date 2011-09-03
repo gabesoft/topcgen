@@ -12,9 +12,7 @@ module Topcgen
       type_is_array = !(/\[\]$/ =~ type).nil?
       value_is_array = value.instance_of? Array
       if value_is_array && !type_is_array
-        length = value.length
-        value = value[0] if length == 1
-        raise "non-array type '#{type}' encountered for array value '#{value}'" if length != 1
+        raise "non-array type '#{type}' encountered for array value '#{value}'"
       end
       ValueGen.new type, value
     end

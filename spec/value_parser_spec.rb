@@ -52,6 +52,12 @@ module Topcgen
       parser.match_length.should eq 27
     end
 
+    it "should parse string array 2" do
+      parser = ValueParser.new 'String[]'
+      parser.parse '{"BBBAB", "NO PAGE", "AABAB", "BBBBB", "NO PAGE"}'	 
+      parser.match.should eq [ "BBBAB", "NO PAGE", "AABAB", "BBBBB", "NO PAGE" ] 
+    end
+
     it "should parse int array" do
       parser = ValueParser.new 'int[]'
       parser.parse '{32, 123,9},{3,42,222L}, "a"'
@@ -76,14 +82,22 @@ module Topcgen
     it "should parse multiple values" do
       str = '"test", 9234L,32,{23,4,1},"ola", {"que", "pasa", "hombre"}, 88, {432323L,3, 4, 4, 12}'
       types = [ 'String', 'long', 'int', 'int[]', 'String', 'String[]', 'int', 'long[]' ]
-      values = types.map do |t|
-        parser = ValueParser.new t
-        parser.parse str
-        str.slice!(0..parser.match_length - 1)
-        parser.match
-      end
-      values.length.should eq 8
+      values = ValueParser.parse types, str
       values.should eq [ 'test', 9234, 32, [ 23, 4, 1 ], 'ola', [ 'que', 'pasa', 'hombre' ], 88, [ 432323, 3, 4, 4, 12 ] ]
+    end
+
+    it "should parse multiple values with empty arrays" do
+      str = '"test", 78, {}, {43}, {}, {23.9, -32.89}, {"a", "b"}'
+      types = [ 'String', 'int', 'int[]', 'long[]', 'double[]', 'double[]', 'String[]' ]
+      values = ValueParser.parse types, str
+      values.should eq [ 'test', 78, [], [ 43 ], [], [ 23.9, -32.89 ], [ 'a', 'b' ] ]
+    end
+
+    it "should parse multiple values with empty string" do
+      str = '" ", "abc", "Y", 5'
+      types = [ 'String', 'String', 'String', 'int' ]
+      values = ValueParser.parse types, str
+      values.should eq [ ' ', 'abc', 'Y', 5 ]
     end
   end
 end
