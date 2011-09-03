@@ -6,6 +6,7 @@ module Topcgen
       html = read_file 'spec/files/statement_dungeon_escape.html'
       stmt = ProblemStatement.new html
       stmt[:method].should eq 'exitTime'
+      stmt.tests.should_not be nil
     end
 
     it "should parse problem statement 2" do

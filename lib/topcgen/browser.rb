@@ -11,7 +11,6 @@ module Topcgen
     end
 
     def login(credentials)
-
       if credentials.nil? || credentials[:user].nil?
         raise 'no user specified'
       end
@@ -22,29 +21,25 @@ module Topcgen
       do_login credentials
       response = go_home
       @logged_in = login_successfull response
-
-      $log.info "login for user #{credentials[:user]} #{@logged_in ? 'succeeded' : 'failed'}"
     end
 
     def logout
       do_logout
       response = go_home
       @logged_in = login_successfull response
-
-      $log.info 'user logged out'
     end
 
     def search(class_name)
-      $log.info "searching for class #{class_name}"
-
       query = get_search_params class_name
       url = get_uri :ProblemArchive, query
       response = http_get url
 
       result = ProblemSearch.new response.body
-      result.links.map do |link|
+      links = result.links.map do |link|
         get_detail link
       end
+
+      links
     end
 
     def get_statement link
@@ -54,8 +49,6 @@ module Topcgen
     end
 
     def get_solution link
-      # TODO: try to get the tests from the solution
-      #       on failure get them from the problem statement
       url = get_uri(nil, nil, link)
       response = http_get url
       ProblemSolution.new response.body
@@ -118,14 +111,14 @@ module Topcgen
     end
 
     def http_get url
-      $log.info "HTTP GET: #{url}"
+      $log.info "HTTP GET: #{url}" unless $log.nil?
       response = HTTP.get(url, @cookies)
       update_cookies response
       response 
     end
 
     def http_post(url, params)      
-      $log.info "HTTP POST: #{url}"
+      $log.info "HTTP POST: #{url}" unless $log.nil?
       response = HTTP.post(url, @cookies, params)
       update_cookies response
       response

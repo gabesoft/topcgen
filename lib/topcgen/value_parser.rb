@@ -8,54 +8,28 @@ module Topcgen
     end
 
     def parse text
-      Safe.run("failed to parse a value of type #{@type} from '#{text}'") do
-        case @type
-        when 'String'
-          parse_string text
-        when 'int'
-          parse_int text
-        when 'long'
-          parse_long text
-        when 'double'
-          parse_double text
-        when 'String[]'
-          parse_string_array text
-        when 'int[]'
-          parse_int_array text
-        when 'long[]'
-          parse_long_array text
-        when 'double[]'
-          parse_double_array text
-        else
-          raise "don't know how to parse values of type #{@type}"
-        end
+      case @type
+      when 'String'
+        parse_string text
+      when 'int'
+        parse_int text
+      when 'long'
+        parse_long text
+      when 'double'
+        parse_double text
+      when 'String[]'
+        parse_string_array text
+      when 'int[]'
+        parse_int_array text
+      when 'long[]'
+        parse_long_array text
+      when 'double[]'
+        parse_double_array text
+      else
+        raise "don't know how to parse values of type #{@type}"
       end
-
-      #begin
-        #case @type
-        #when 'String'
-          #parse_string text
-        #when 'int'
-          #parse_int text
-        #when 'long'
-          #parse_long text
-        #when 'double'
-          #parse_double text
-        #when 'String[]'
-          #parse_string_array text
-        #when 'int[]'
-          #parse_int_array text
-        #when 'long[]'
-          #parse_long_array text
-        #when 'double[]'
-          #parse_double_array text
-        #else
-          #raise "don't know how to parse values of type #{@type}"
-        #end
-      #rescue Exception => e
-        #$log.error "failed to parse a value of type #{@type} from '#{text}'"
-        #raise e
-      #end
+    rescue
+      raise ValueParseException.new(@type, text)
     end
 
     def self.parse(types, values)

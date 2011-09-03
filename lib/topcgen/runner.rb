@@ -10,7 +10,6 @@ require 'logger'
 
 module Topcgen
   $log_file = '.topcgen.log'
-  $log = Logger.new($log_file, 1, 10240)
 
   def self.initialize_logger
     File.delete $log_file if File.exists? $log_file
@@ -32,8 +31,13 @@ module Topcgen
       puts "running search for class #{options[:class]} ..."
 
       browser.login settings[:credentials]
+
+      $log.info "login for user #{settings[:credentials][:user]} #{browser.logged_in ? 'succeeded' : 'failed'}"
+
       results = browser.search options[:class]
       selected = []
+
+      $log.info "search for class #{options[:class]} returned #{results.length} results"
 
       if results.length == 0
         puts 'no problems were found that match your search criteria'
@@ -62,14 +66,19 @@ module Topcgen
           s[:main_imports] = settings[:main_imports]
           s[:test_imports] = settings[:test_imports]
 
-          puts "generating files for class #{s[:name]} ..."
+          $log.info "generating files for class #{s[:name]} ..."
 
-          Safe.run "failed to generate files see #{$log_file} for details" do
-            problem = {}
-            problem[:info] = s
-            problem[:statement] = browser.get_statement s[:statement_link]
-            problem[:solution] = browser.get_solution s[:solution_java]
+          begin
+            problem               = {}
+            problem[:info]        = s
+            problem[:statement]   = get_statement(browser, s[:statement_link])
+            problem[:solution]    = get_solution(browser, s[:solution_java])
+
             generate_java_files(problem, options)
+          rescue Exception => e
+            $log.error "failed to generate files see #{$log_file} for details" 
+            $log.error e.message
+            $log.error e.backtrace.join("\n\t")
           end
         end
       end
@@ -80,10 +89,24 @@ module Topcgen
 
   private
 
+  def self.get_solution(browser, link)
+    browser.get_solution link
+  rescue Exception => e
+    $log.error "failed to get the problem solution"
+    $log.error "solution link: #{link}"
+    $log.error e.message
+    $log.error e.backtrace.join("\n\t")
+    nil
+  end
+
+  def self.get_statement(browser, link)
+    browser.get_statement link
+  end
+
   def self.generate_java_files(problem, options)
     info = problem[:info]
     statement = problem[:statement]
-    tests = problem[:solution].tests
+    tests = problem[:solution].nil? ? statement.tests : problem[:solution].tests
 
     method = MethodParser.new(statement[:method], 
                               statement[:parameters], 
