@@ -66,15 +66,12 @@ module Topcgen
           s[:test_imports] = settings[:test_imports]
 
           puts "generating files for class #{s[:name]} ..."
-          #puts s[:name]
-          #puts s[:statement_link_full]
-          #puts s[:solution_java]
 
           problem = {}
           problem[:info] = s
           problem[:statement] = browser.get_statement s[:statement_link]
           problem[:solution] = browser.get_solution s[:solution_java]
-          generate_java_files problem
+          generate_java_files(problem, options)
         end
       end
     ensure
@@ -84,7 +81,7 @@ module Topcgen
 
   private
 
-  def self.generate_java_files problem
+  def self.generate_java_files(problem, options)
     info = problem[:info]
     statement = problem[:statement]
     tests = problem[:solution].tests
@@ -102,19 +99,19 @@ module Topcgen
 
     package = JAVA::Package.new(info[:name], info[:package_root], info[:categories])
 
-    write_file(package.src_file) do |f|
+    write_file(package.src_file, options) do |f|
       JAVA.main_class f, package, method, info
     end
-    write_file(package.test_file) do |f|
+    write_file(package.test_file, options) do |f|
       JAVA.test_class f, package, method, info, test_values
     end
   end
 
-  def self.write_file file
+  def self.write_file(file, options)
     dir = File.dirname file
     FileUtils.mkdir_p dir unless Dir.exists? dir
 
-    if File.exists? file
+    if (File.exists? file) && (!options[:force])
       puts "skipped file #{file} (already exists)"
     else
       File.open(file, 'w') do |f|
@@ -143,6 +140,10 @@ module Topcgen
 
       opts.on '-p', '--pass [PASSWORD]', 'the topcoder password' do |pass|
         options[:pass] = pass
+      end
+
+      opts.on '-f', '--force', 'overwrite existing files' do |force|
+        options[:force] = force
       end
 
       opts.on_tail '-h', '--help', 'display this screen' do
