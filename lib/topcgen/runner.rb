@@ -67,6 +67,7 @@ module Topcgen
           s[:test_imports] = settings[:test_imports]
 
           puts "generating files for class #{s[:name]} ..."
+          $log.info "generating files for class #{s[:name]}"
 
           begin
             problem               = {}

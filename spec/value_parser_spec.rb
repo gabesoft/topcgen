@@ -94,10 +94,10 @@ module Topcgen
     end
 
     it "should parse multiple values with empty string" do
-      str = '" ", "abc", "Y", 5'
-      types = [ 'String', 'String', 'String', 'int' ]
+      str = '" ", "", "abc", "Y", 5'
+      types = [ 'String', 'String', 'String', 'String', 'int' ]
       values = ValueParser.parse types, str
-      values.should eq [ ' ', 'abc', 'Y', 5 ]
+      values.should eq [ ' ', '', 'abc', 'Y', 5 ]
     end
   end
 end

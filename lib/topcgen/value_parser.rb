@@ -33,19 +33,21 @@ module Topcgen
     end
 
     def self.parse(types, values)
-      input = values
+      input = values.clone()
       types.map do |t|
         parser = ValueParser.new t
         parser.parse input
         input.slice!(0..parser.match_length - 1)
         parser.match
       end
+    rescue ValueParseException
+      raise ParseException.new "#{values}, types were #{types}"
     end
 
     private
 
     def parse_string text
-      parse_text(/^"(.+?)"(,\s*)?/x, text)
+      parse_text(/^"([^"]+?)?"(,\s*)?/x, text)
     end
 
     def parse_int text
