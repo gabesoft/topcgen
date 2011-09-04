@@ -2,7 +2,6 @@ $:.unshift(File.dirname(__FILE__))
 require 'topcgen/version'
 require 'net/https'
 require 'optparse'
-require 'pp'
 require 'json'
 require 'readline'
 require 'fileutils'
@@ -73,7 +72,7 @@ module Topcgen
             problem               = {}
             problem[:info]        = s
             problem[:statement]   = get_statement(browser, s[:statement_link])
-            problem[:solution]    = get_solution(browser, s[:solution_java])
+            problem[:solution]    = get_solution(browser, s)
 
             generate_java_files(problem, options)
           rescue Exception => e
@@ -90,7 +89,11 @@ module Topcgen
 
   private
 
-  def self.get_solution(browser, link)
+  def self.get_solution(browser, info)
+    link = info[:solution_java]
+    link = info[:solution_cpp]    if link.nil?
+    link = info[:solution_csharp] if link.nil?
+    link = info[:solution_vb]     if link.nil?
     browser.get_solution link
   rescue Exception => e
     $log.error "failed to get the problem solution"
