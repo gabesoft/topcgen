@@ -3,9 +3,6 @@ require 'delegate'
 
 module Topcgen
   class ProblemDetail < DelegateClass(Hash)
-    # TODO: used_as could come in as a multiple items comma separated see MagicCube
-    #       need to use the tests in statement if the solution page is not available
-    #       there are html characters in the used_in string see GameOfLife
     def initialize html
       doc = Hpricot.parse html
       container = doc/'div.statTableIndent'
@@ -22,13 +19,19 @@ module Topcgen
       row_solution = (container/'tr').find { |tr| tr.inner_html.include? 'Top Submission' }
       solution_links = row_solution/'a.statText'
 
+      strip = lambda { |h| ParseHelper.escape(ParseHelper.strip_ws h) }
+      split = lambda { |h, c| ParseHelper.split (ParseHelper.escape h), c }
+
       @data = {}
-      @data[:name]            = ParseHelper.strip_ws stmt_link.inner_html
       @data[:statement_link]  = stmt_link.attributes['href']
-      @data[:used_in]         = ParseHelper.strip_ws round_link.inner_html
-      @data[:used_as]         = ParseHelper.split((row_used_as/'td')[1].inner_html, ',')[0]
-      @data[:categories]      = ParseHelper.strip_ws (row_categories/'td')[1].inner_html
-      @data[:point_value]     = ParseHelper.split((row_point_value/'td')[1].inner_html, ',')[0]
+
+      @data[:name]            = strip[ stmt_link.inner_html ]
+      @data[:used_in]         = strip[ round_link.inner_html ]
+      @data[:categories]      = strip[ (row_categories/'td')[1].inner_html ]
+
+      @data[:used_as]         = split[ (row_used_as/'td')[1].inner_html, ',' ][0]
+      @data[:point_value]     = split[ (row_point_value/'td')[1].inner_html, ',' ][0]
+
       @data[:solution_java]   = solution_links[0].attributes['href'] unless solution_links.length < 2
       @data[:solution_cpp]    = solution_links[1].attributes['href'] unless solution_links.length < 3
       @data[:solution_csharp] = solution_links[2].attributes['href'] unless solution_links.length < 4

@@ -16,12 +16,14 @@ module Topcgen
       returns_definition = (container/'tr').find { |tr| tr.inner_html.include? 'Returns:' }
       signature_definition = (container/'tr').find { |tr| tr.inner_html.include? 'Method signature:' }
 
+      strip = lambda { |h| ParseHelper.escape(ParseHelper.strip_ws h) }
+
       @data = {}
-      @data[:class]       = ParseHelper.strip_ws (class_definition/'td')[1].inner_html
-      @data[:method]      = ParseHelper.strip_ws (method_definition/'td')[1].inner_html
-      @data[:parameters]  = ParseHelper.strip_ws (parameters_definition/'td')[1].inner_html
-      @data[:returns]     = ParseHelper.strip_ws (returns_definition/'td')[1].inner_html
-      @data[:signature]   = ParseHelper.strip_ws (signature_definition/'td')[1].inner_html
+      @data[:class]       = strip[ (class_definition/'td')[1].inner_html ]
+      @data[:method]      = strip[ (method_definition/'td')[1].inner_html ]
+      @data[:parameters]  = strip[ (parameters_definition/'td')[1].inner_html ]
+      @data[:returns]     = strip[ (returns_definition/'td')[1].inner_html ]
+      @data[:signature]   = strip[ (signature_definition/'td')[1].inner_html ]
 
       super(@data)
 

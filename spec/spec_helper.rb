@@ -8,4 +8,3 @@ require 'topcgen'
 RSpec.configure do |config|
   # add additional config here
 end
-

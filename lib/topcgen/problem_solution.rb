@@ -11,6 +11,8 @@ module Topcgen
       container = ParseHelper.find_deep(doc, 'table', 'System Test Results')
       rows = container/'tr'
 
+      clean = lambda { |h| ParseHelper.clean_ws (ParseHelper.escape h) }
+
       @tests = []
       rows.each do |r|
         if !r.nil? && (r.inner_html.include? 'Passed')
@@ -18,8 +20,8 @@ module Topcgen
           a_idx = cols.length > 4 ? 1 : 0
           e_idx = cols.length > 4 ? 3 : 1
           dict = {}
-          dict[:arguments] = ParseHelper.clean_ws cols[a_idx].inner_html
-          dict[:expected] = ParseHelper.clean_ws cols[e_idx].inner_html
+          dict[:arguments]  = clean[ cols[a_idx].inner_html ]
+          dict[:expected]   = clean[ cols[e_idx].inner_html ]
           @tests.push dict
         end
       end

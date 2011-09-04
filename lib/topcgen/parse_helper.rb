@@ -1,3 +1,5 @@
+require 'cgi'
+
 module Topcgen
   class ParseHelper
     def self.find_deep(doc, element, *contains)
@@ -12,6 +14,10 @@ module Topcgen
       end
 
       container
+    end
+
+    def self.escape html
+      CGI.unescapeHTML html
     end
 
     def self.clean_ws html
