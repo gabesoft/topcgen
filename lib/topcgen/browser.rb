@@ -7,7 +7,6 @@ module Topcgen
     def initialize
       @cookies = CookieStore.new
       @logged_in = false
-      @tc_url = 'http://community.topcoder.com/tc'
     end
 
     def login(credentials)
