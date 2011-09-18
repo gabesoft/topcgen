@@ -11,7 +11,7 @@ module Topcgen
       container = ParseHelper.find_deep(doc, 'table', 'System Test Results')
       rows = container/'tr'
 
-      clean = lambda { |h| ParseHelper.clean_ws (ParseHelper.escape h) }
+      clean = lambda { |h| ParseHelper.strip_ws (ParseHelper.escape h) }
 
       @tests = []
       rows.each do |r|

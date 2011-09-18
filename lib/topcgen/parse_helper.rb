@@ -20,10 +20,6 @@ module Topcgen
       CGI.unescapeHTML html
     end
 
-    def self.clean_ws html
-      html.gsub(/\s+/, "")
-    end
-
     def self.strip_ws html
       html.strip
     end

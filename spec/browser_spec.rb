@@ -76,8 +76,8 @@ module Topcgen
 
       solution = @browser.get_solution solution_url
       solution.tests.length.should eq 41
-      solution.tests[0].should eq ({:arguments=>"{\"0x4\",\"0x3\",\"0x3\"},{\"0x9\",\"009\",\"0x9\"},{\"0x9\",\"1x9\",\"009\"},{\"0x9\",\"0x0\",\"009\"},2,2", :expected=>"10"})
-      solution.tests[-1].should eq ({:arguments=>"{\"91\"},{\"99\"},{\"11\"},{\"11\"},0,0", :expected=>"2"})
+      solution.tests[0].should eq ({:arguments=>"{\"0x4\", \"0x3\", \"0x3\"},\n              {\"0x9\", \"009\", \"0x9\"},\n              {\"0x9\", \"1x9\", \"009\"},\n              {\"0x9\", \"0x0\", \"009\"},\n              2,\n              2", :expected=>"10"})
+      solution.tests[-1].should eq ({:arguments=>"{\"91\"},\n              {\"99\"},\n              {\"11\"},\n              {\"11\"},\n              0,\n              0", :expected=>"2"})
     end
 
     def get_contents file
