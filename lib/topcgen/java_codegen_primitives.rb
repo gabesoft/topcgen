@@ -59,6 +59,8 @@ module Topcgen
         ValueGen.new 'int', 0
       when 'long'
         ValueGen.new 'long', 0
+      when 'double'
+        ValueGen.new 'double', 0.0
       else  
         'null'
       end
