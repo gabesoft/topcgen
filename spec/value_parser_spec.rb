@@ -99,5 +99,12 @@ module Topcgen
       values = ValueParser.parse types, str
       values.should eq [ ' ', '', 'abc', 'Y', 5 ]
     end
+
+    it "should parse strings with commas" do
+      str = "{\"000, 030, 030, 040, 000, 000, 000\", \"020, 020, 020, 010, 010, 010, 010\"},\n                      4"
+      types = [ 'String[]', 'int' ]
+      values = ValueParser.parse types, str
+      values.should eq [ [ "000, 030, 030, 040, 000, 000, 000", "020, 020, 020, 010, 010, 010, 010" ], 4 ]
+    end
   end
 end

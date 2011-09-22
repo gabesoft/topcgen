@@ -67,7 +67,7 @@ module Topcgen
 
     def parse_string_array text
       parse_text(/^\{([^}{]+?)?\}(,\s*)?/x, text)
-      @match = @match.split(/,\s*/).map { |s| s.gsub(/^"|"$/, "") }
+      @match = @match.split(/",\s*"/).map { |s| s.gsub(/^"|"$/, "") }
     end
 
     def parse_int_array text

@@ -106,6 +106,11 @@ module Topcgen
           stmt.to_s.should eq '{ "ab", "cd", "e", "f" }'
         end
 
+        it "should output a string array with commas" do
+          stmt = JAVA.val 'String[]', [ "000, 030, 030, 040, 000, 000, 000", "020, 020, 020, 010, 010, 010, 010" ]
+          stmt.to_s.should eq '{ "000, 030, 030, 040, 000, 000, 000", "020, 020, 020, 010, 010, 010, 010" }'
+        end
+
         it "should output a long array" do
           stmt = JAVA.val 'long[]', [ 3, 4, 89, 9 ]
           stmt.to_s.should eq '{ 3L, 4L, 89L, 9L }'
