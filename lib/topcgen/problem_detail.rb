@@ -23,10 +23,9 @@ module Topcgen
       split = lambda { |h, c| ParseHelper.split (ParseHelper.escape h), c }
 
       @data = {}
-      @data[:statement_link]  = stmt_link.attributes['href']
 
       @data[:name]            = strip[ stmt_link.inner_html ]
-      @data[:used_in]         = strip[ round_link.inner_html ]
+      @data[:sed_in]          = strip[ round_link.inner_html ]
       @data[:categories]      = strip[ (row_categories/'td')[1].inner_html ]
 
       @data[:used_as]         = split[ (row_used_as/'td')[1].inner_html, ',' ][0]
@@ -37,6 +36,8 @@ module Topcgen
       @data[:solution_csharp] = solution_links[2].attributes['href'] unless solution_links.length < 4
       @data[:solution_vb]     = solution_links[3].attributes['href'] unless solution_links.length < 5
 
+      @data[:statement_link]  = stmt_link.attributes['href']
+      @data[:editorial_link]  = Editorial.get_link(@data[:used_in])
       super(@data)
     rescue Exception => e
       raise ParseException.new html 

@@ -27,9 +27,10 @@ module Topcgen
     browser = Browser.new
 
     begin
-      puts "running search for class #{options[:class]} ..."
+      puts "logging in with user #{settings[:credentials][:user]}"
 
       browser.login settings[:credentials]
+      puts "running search for class #{options[:class]} ..."
 
       $log.info "login for user #{settings[:credentials][:user]} #{browser.logged_in ? 'succeeded' : 'failed'}"
 
@@ -83,6 +84,7 @@ module Topcgen
         end
       end
     ensure
+      puts "logging out ..."
       browser.logout
     end
   end

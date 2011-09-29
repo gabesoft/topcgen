@@ -7,11 +7,14 @@
 AnnotationGen	lib/topcgen/java_codegen_impl.rb	/^    class AnnotationGen$/;"	c	class:Topcgen.JAVA
 BlankGen	lib/topcgen/java_codegen_impl.rb	/^    class BlankGen$/;"	c	class:Topcgen.JAVA
 Browser	lib/topcgen/browser.rb	/^  class Browser$/;"	c	class:Topcgen
+CRPF	lib/topcgen/editorial.rb	/^  class CRPF$/;"	c	class:Topcgen
 ClassGen	lib/topcgen/java_codegen_impl.rb	/^    class ClassGen$/;"	c	class:Topcgen.JAVA
 CommentGen	lib/topcgen/java_codegen_impl.rb	/^    class CommentGen$/;"	c	class:Topcgen.JAVA
 CookieStore	lib/topcgen/cookie_store.rb	/^  class CookieStore < DelegateClass(Hash)$/;"	c	class:Topcgen
 CookieStoreSerializer	lib/topcgen/cookie_store.rb	/^  class CookieStoreSerializer$/;"	c	class:Topcgen
 Defenses	spec/files/solution_fountain_of_life.html	/^          <a name="Defenses"><\/a>$/;"	a
+Editorial	lib/topcgen/editorial.rb	/^  class Editorial$/;"	c	class:Topcgen
+EditorialLinks	lib/topcgen/editorial.rb	/^  class EditorialLinks$/;"	c	class:Topcgen
 FunCallGen	lib/topcgen/java_codegen_impl.rb	/^    class FunCallGen$/;"	c	class:Topcgen.JAVA
 HTTP	lib/topcgen/http.rb	/^  class HTTP$/;"	c	class:Topcgen
 ImportGen	lib/topcgen/java_codegen_impl.rb	/^    class ImportGen$/;"	c	class:Topcgen.JAVA
@@ -39,11 +42,16 @@ ProblemSearch	lib/topcgen/problem_search.rb	/^  class ProblemSearch$/;"	c	class:
 ProblemSolution	lib/topcgen/problem_solution.rb	/^  class ProblemSolution$/;"	c	class:Topcgen
 ProblemStatement	lib/topcgen/problem_statement.rb	/^  class ProblemStatement < DelegateClass(Hash)$/;"	c	class:Topcgen
 ReturnGen	lib/topcgen/java_codegen_impl.rb	/^    class ReturnGen$/;"	c	class:Topcgen.JAVA
+SRM	lib/topcgen/editorial.rb	/^  class SRM$/;"	c	class:Topcgen
 Settings	lib/topcgen/settings.rb	/^  class Settings$/;"	c	class:Topcgen
 SpecWeb	spec/specweb.rb	/^  class SpecWeb$/;"	c	class:Topcgen
 T	lib/topcgen/java_codegen_impl.rb	/^    class T$/;"	c	class:Topcgen.JAVA
+TCCC	lib/topcgen/editorial.rb	/^  class TCCC$/;"	c	class:Topcgen
+TCI	lib/topcgen/editorial.rb	/^  class TCI$/;"	c	class:Topcgen
+TCO	lib/topcgen/editorial.rb	/^  class TCO$/;"	c	class:Topcgen
 Topcgen	lib/topcgen/browser.rb	/^module Topcgen$/;"	m
 Topcgen	lib/topcgen/cookie_store.rb	/^module Topcgen$/;"	m
+Topcgen	lib/topcgen/editorial.rb	/^module Topcgen$/;"	m
 Topcgen	lib/topcgen/exceptions.rb	/^module Topcgen$/;"	m
 Topcgen	lib/topcgen/http.rb	/^module Topcgen$/;"	m
 Topcgen	lib/topcgen/java_codegen.rb	/^module Topcgen$/;"	m
@@ -135,12 +143,15 @@ gen_test_class	lib/topcgen/java_codegen.rb	/^    def self.gen_test_class(stream,
 gen_test_imports	lib/topcgen/java_codegen.rb	/^    def self.gen_test_imports(stream, imports, package)$/;"	F	class:Topcgen.JAVA
 generate_java_files	lib/topcgen/runner.rb	/^  def self.generate_java_files(problem, options)$/;"	F	class:Topcgen
 get	lib/topcgen/http.rb	/^    def self.get(uri, cookies)$/;"	F	class:Topcgen.HTTP
+getSRM	lib/topcgen/editorial.rb	/^    def self.getSRM(key)$/;"	F	class:Topcgen.EditorialLinks
 get_all_categories	lib/topcgen/java_codegen_package.rb	/^      def get_all_categories$/;"	f	class:Topcgen.JAVA.Package
 get_contents	spec/browser_spec.rb	/^    def get_contents file$/;"	f
 get_debug_method	lib/topcgen/java_codegen.rb	/^    def self.get_debug_method$/;"	F	class:Topcgen.JAVA
 get_detail	lib/topcgen/browser.rb	/^    def get_detail link$/;"	f	class:Topcgen.Browser
 get_domain	spec/specweb.rb	/^    def get_domain auth = false$/;"	f	class:Topcgen.SpecWeb
 get_http	lib/topcgen/http.rb	/^    def self.get_http uri$/;"	F	class:Topcgen.HTTP
+get_link	lib/topcgen/editorial.rb	/^    def self.get_link(used_in)$/;"	F	class:Topcgen.Editorial
+get_link	lib/topcgen/editorial.rb	/^    def self.get_link(used_in)$/;"	F	class:Topcgen.SRM
 get_rel_package	lib/topcgen/java_codegen_package.rb	/^      def get_rel_package$/;"	f	class:Topcgen.JAVA.Package
 get_search_params	lib/topcgen/browser.rb	/^    def get_search_params class_name$/;"	f	class:Topcgen.Browser
 get_solution	lib/topcgen/browser.rb	/^    def get_solution link$/;"	f	class:Topcgen.Browser
@@ -156,6 +167,7 @@ http_post	lib/topcgen/browser.rb	/^    def http_post(url, params)      $/;"	f	cl
 import	lib/topcgen/java_codegen_primitives.rb	/^    def self.import(path, object='*', static=false)$/;"	F	class:Topcgen.JAVA
 initialize	lib/topcgen/browser.rb	/^    def initialize$/;"	f	class:Topcgen.Browser
 initialize	lib/topcgen/cookie_store.rb	/^    def initialize(cookies = nil)$/;"	f	class:Topcgen.CookieStore
+initialize	lib/topcgen/editorial.rb	/^    def self.initialize$/;"	F	class:Topcgen.EditorialLinks
 initialize	lib/topcgen/exceptions.rb	/^    def initialize str$/;"	f	class:Topcgen.ParseException
 initialize	lib/topcgen/exceptions.rb	/^    def initialize(message, cause=$!)$/;"	f	class:Topcgen.TopcgenException
 initialize	lib/topcgen/exceptions.rb	/^    def initialize(type, str)$/;"	f	class:Topcgen.ValueParseException
@@ -211,6 +223,7 @@ parse_string_array	lib/topcgen/value_parser.rb	/^    def parse_string_array text
 parse_tests	lib/topcgen/problem_statement.rb	/^    def parse_tests doc$/;"	f	class:Topcgen.ProblemStatement
 parse_text	lib/topcgen/value_parser.rb	/^    def parse_text(pattern, text)$/;"	f	class:Topcgen.ValueParser
 pkg	lib/topcgen/java_codegen_primitives.rb	/^    def self.pkg(path)$/;"	F	class:Topcgen.JAVA
+populate	lib/topcgen/editorial.rb	/^    def self.populate map$/;"	F	class:Topcgen.EditorialLinks
 post	lib/topcgen/http.rb	/^    def self.post(uri, cookies, params = nil)$/;"	F	class:Topcgen.HTTP
 prepare_values	spec/java_codegen_spec.rb	/^      def prepare_values$/;"	f
 previous	spec/files/search.html	/^  function previous() {$/;"	f
