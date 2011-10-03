@@ -27,7 +27,7 @@ module Topcgen
     browser = Browser.new
 
     begin
-      puts "logging in with user #{settings[:credentials][:user]}"
+      puts "logging in with user #{settings[:credentials][:user]} ..."
 
       browser.login settings[:credentials]
       puts "running search for class #{options[:class]} ..."

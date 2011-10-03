@@ -73,7 +73,8 @@ module Topcgen
       comments = [
         comment(info[:used_in] + ' ' + info[:used_as] + ' - ' + info[:point_value]),
         comment(info[:categories].downcase),
-        comment(info[:statement_link_full]) ]
+        comment("statement: #{info[:statement_link_full]}"),
+        comment("editorial: #{info[:editorial_link_full]}") ]
 
         return_type = method_def.return_type
         return_statement = ret (default return_type)

@@ -4,7 +4,9 @@ module Topcgen
   module JAVA
     describe JAVA do
       def initialize_values
-        @info = {:name=>"KiloManX", :statement_link=>"/stat?c=problem_statement&pm=2288&rd=4725", 
+        @info = {:name=>"KiloManX", 
+                 :statement_link=>"/stat?c=problem_statement&pm=2288&rd=4725", 
+                 :editorial_link_full=>"http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=srm181", 
                  :used_in=>"SRM 181", :used_as=>"Division I Level Three", 
                  :categories=>"Dynamic Programming, Search", :point_value=>"1000", 
                  :solution_java=>"/stat?c=problem_solution&cr=277659&rd=4725&pm=2288", 
