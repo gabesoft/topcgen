@@ -37,7 +37,6 @@ module Topcgen
       @data[:solution_vb]           = solution_links[3].attributes['href'] unless solution_links.length < 5
 
       @data[:statement_link]        = stmt_link.attributes['href']
-      @data[:editorial_link_full]   = Editorial.get_link(@data[:used_in])
       super(@data)
     rescue Exception => e
       raise ParseException.new html 

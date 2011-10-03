@@ -60,6 +60,7 @@ module Topcgen
       response = http_get url
       detail = ProblemDetail.new response.body
       detail[:statement_link_full] = get_url detail[:statement_link]
+      detail[:editorial_link_full] = Editorial.get_link(detail[:used_in])
       detail
     end
 

@@ -91,5 +91,10 @@ module Topcgen
      link = Editorial.get_link("TCCC '03 NE/SE Regional")
      link.should eq "http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=tccc03_nese"
     end
+
+    it "should get link for TCO11 Wildcard Round" do
+     link = Editorial.get_link("TCO11 Wildcard Round")
+     link.should eq "http://apps.topcoder.com/wiki/display/tc/Algorithm+Problem+Set+Analysis"
+    end
   end
 end

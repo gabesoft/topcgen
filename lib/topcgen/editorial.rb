@@ -1,7 +1,8 @@
 module Topcgen
   class Editorial
-    link = nil
     def self.get_link(used_in)
+      link = nil
+
       if used_in =~ /^SRM/
         link = SRM.get_link(used_in)
       elsif used_in =~ /^TCO/
@@ -13,8 +14,9 @@ module Topcgen
       elsif used_in =~ /^CRPF/
         link = CRPF.get_link(used_in)
       end
+
+      link.nil? ? "http://apps.topcoder.com/wiki/display/tc/Algorithm+Problem+Set+Analysis" : link
     end
-    link.nil? ? "http://apps.topcoder.com/wiki/display/tc/Algorithm+Problem+Set+Analysis" : link
   end
 
   class SRM

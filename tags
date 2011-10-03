@@ -69,6 +69,7 @@ Topcgen	lib/topcgen/value_parser.rb	/^module Topcgen$/;"	m
 Topcgen	lib/topcgen/version.rb	/^module Topcgen$/;"	m
 Topcgen	spec/browser_spec.rb	/^module Topcgen$/;"	m
 Topcgen	spec/cookie_store_spec.rb	/^module Topcgen$/;"	m
+Topcgen	spec/editorial_spec.rb	/^module Topcgen$/;"	m
 Topcgen	spec/http_spec.rb	/^module Topcgen$/;"	m
 Topcgen	spec/java_codegen_package_spec.rb	/^module Topcgen$/;"	m
 Topcgen	spec/java_codegen_primitives_spec.rb	/^module Topcgen$/;"	m
