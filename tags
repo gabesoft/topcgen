@@ -116,6 +116,7 @@ find_deep	lib/topcgen/parse_helper.rb	/^    def self.find_deep(doc, element, *co
 flipMenu	spec/files/detail_gameoflife.html	/^            function flipMenu(myMenuName){$/;"	f
 flipMenu	spec/files/detail_kiloman.html	/^function flipMenu(myMenuName){$/;"	f
 flipMenu	spec/files/detail_kilomanx.html	/^function flipMenu(myMenuName){$/;"	f
+flipMenu	spec/files/detail_quizshow.html	/^            function flipMenu(myMenuName){$/;"	f
 flipMenu	spec/files/search.html	/^function flipMenu(myMenuName){$/;"	f
 flipMenu	spec/files/solution_dungeon_escape.html	/^function flipMenu(myMenuName){$/;"	f
 flipMenu	spec/files/solution_fountain_of_life.html	/^            function flipMenu(myMenuName){$/;"	f
@@ -268,6 +269,7 @@ to_s	lib/topcgen/java_codegen_impl.rb	/^      def to_s$/;"	f	class:Topcgen.JAVA.
 toggleMenu	spec/files/detail_gameoflife.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f
 toggleMenu	spec/files/detail_kiloman.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f
 toggleMenu	spec/files/detail_kilomanx.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f
+toggleMenu	spec/files/detail_quizshow.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f
 toggleMenu	spec/files/search.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f
 toggleMenu	spec/files/solution_dungeon_escape.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f
 toggleMenu	spec/files/solution_fountain_of_life.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f

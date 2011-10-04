@@ -23,7 +23,7 @@ module Topcgen
       assert_same_length(@parameter_types, parameters)
 
       parameters.zip(@parameter_types).map do |p_decl, p_type| 
-        p_patt = /#{Regexp.quote(p_type)}\s+([a-zA-Z_]+)/x 
+        p_patt = /#{Regexp.quote(p_type)}\s+([a-zA-Z_0-9]+)/x 
         assert_same_type(p_decl, p_type, p_patt)
         { :name => p_patt.match(p_decl)[1], :type => p_type }
       end

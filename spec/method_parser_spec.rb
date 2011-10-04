@@ -19,5 +19,20 @@ module Topcgen
       parser.name.should eq 'leastShots'
       parser.return_type.should eq 'int'
     end
+
+    it "should parse method parameters with numbers" do
+      data = {
+        :method=>"wager", 
+        :parameters=>"int[], int, int", 
+        :returns=>"int", 
+        :signature=>"int wager(int[] scores, int wager1, int wager2)"
+      }
+      
+      parser = MethodParser.new data[:method], data[:parameters], data[:returns], data[:signature]
+      parser.parameters.length.should eq 3
+      parser.parameters[0].should eq ({ :type => 'int[]', :name => 'scores' })
+      parser.parameters[1].should eq ({ :type => 'int', :name => 'wager1' })
+      parser.parameters[2].should eq ({ :type => 'int', :name => 'wager2' })
+    end
   end
 end
