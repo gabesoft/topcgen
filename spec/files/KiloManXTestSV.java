@@ -6,27 +6,28 @@ import static org.junit.Assert.*;
 import topc.dynamic.*;
 
 public class KiloManXTest {
+  double DELTA = 0.000001;
   KiloManX kilomanx = new KiloManX();
 
   @Test
   public void case1() {
     String[] damageChart = { "070", "500", "140" };
     int[] bossHealth = { 150, 150, 150 };
-    assertEquals(218.0, kilomanx.leastShots(damageChart, bossHealth));
+    assertEquals(218.0, kilomanx.leastShots(damageChart, bossHealth), DELTA);
   }
 
   @Test
   public void case2() {
     String[] damageChart = { "1542", "7935", "1139", "8882" };
     int[] bossHealth = { 150, 150, 150, 150 };
-    assertEquals(205.0, kilomanx.leastShots(damageChart, bossHealth));
+    assertEquals(205.0, kilomanx.leastShots(damageChart, bossHealth), DELTA);
   }
 
   @Test
   public void case3() {
     String[] damageChart = { "07", "40" };
     int[] bossHealth = { 150, 10 };
-    assertEquals(48.0, kilomanx.leastShots(damageChart, bossHealth));
+    assertEquals(48.0, kilomanx.leastShots(damageChart, bossHealth), DELTA);
   }
 
 }

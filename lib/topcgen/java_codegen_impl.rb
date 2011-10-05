@@ -138,6 +138,10 @@ module Topcgen
     end
 
     class VariableGen
+      attr_reader :name
+      attr_reader :type
+      attr_reader :value
+
       def initialize(type, name, value=nil)
         @name = name
         @type = type

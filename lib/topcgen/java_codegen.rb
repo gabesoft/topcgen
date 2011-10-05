@@ -21,11 +21,13 @@ module Topcgen
     end
 
     def self.gen_test_class(stream, method_def, info, tests)
+      delta = var 'double', 'DELTA', (val 'double', '0.000001')
       field = var info[:name], info[:name].downcase, (ctor info[:name])
 
       args_def = method_def.parameters
       return_type = method_def.return_type
       return_type_is_array = !(/\[\]$/ =~ return_type).nil?
+      return_type_is_double = (return_type == 'double')
 
       assert_name = return_type_is_array ? 'assertArrayEquals' : 'assertEquals'
       actual_arguments = args_def.map { |p| p[:name] }
@@ -39,7 +41,8 @@ module Topcgen
         statements = args_def.zip(args).map { |a, v| var a[:type], a[:name], (val a[:type], v) }
 
         expected = return_type_is_array ? arr(return_type, t[:expected]) : val(return_type, t[:expected])
-        assert_call = call assert_name, expected, actual
+        assert_arguments = return_type_is_double ? [ expected, actual, delta.name] : [ expected, actual ]
+        assert_call = call assert_name, *assert_arguments
 
         statements.push assert_call
         test_method = method(name, 'void', nil, statements, test_annotation)
@@ -47,7 +50,8 @@ module Topcgen
       end
 
       test_class_name = "#{info[:name]}Test"
-      test_class = clas test_class_name, [ field ], methods
+      test_class_fields = return_type_is_double ? [ delta, field ] : [ field ]
+      test_class = clas test_class_name, test_class_fields, methods
       test_class.gen stream
     end
 
