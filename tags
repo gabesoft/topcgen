@@ -12,6 +12,7 @@ ClassGen	lib/topcgen/java_codegen_impl.rb	/^    class ClassGen$/;"	c	class:Topcg
 CommentGen	lib/topcgen/java_codegen_impl.rb	/^    class CommentGen$/;"	c	class:Topcgen.JAVA
 CookieStore	lib/topcgen/cookie_store.rb	/^  class CookieStore < DelegateClass(Hash)$/;"	c	class:Topcgen
 CookieStoreSerializer	lib/topcgen/cookie_store.rb	/^  class CookieStoreSerializer$/;"	c	class:Topcgen
+DELTA	spec/files/KiloManXTestSV.java	/^  double DELTA = 1.0e-09;$/;"	f	class:KiloManXTest
 Defenses	spec/files/solution_fountain_of_life.html	/^          <a name="Defenses"><\/a>$/;"	a
 Editorial	lib/topcgen/editorial.rb	/^  class Editorial$/;"	c	class:Topcgen
 FunCallGen	lib/topcgen/java_codegen_impl.rb	/^    class FunCallGen$/;"	c	class:Topcgen.JAVA

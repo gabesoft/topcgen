@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 import topc.dynamic.*;
 
 public class KiloManXTest {
-  double DELTA = 0.000001;
+  double DELTA = 1.0e-09;
   KiloManX kilomanx = new KiloManX();
 
   @Test

@@ -21,7 +21,7 @@ module Topcgen
     end
 
     def self.gen_test_class(stream, method_def, info, tests)
-      delta = var 'double', 'DELTA', (val 'double', '0.000001')
+      delta = var 'double', 'DELTA', (val 'double', 0.000000001)
       field = var info[:name], info[:name].downcase, (ctor info[:name])
 
       args_def = method_def.parameters
