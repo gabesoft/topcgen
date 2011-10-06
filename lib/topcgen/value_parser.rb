@@ -61,7 +61,7 @@ module Topcgen
     end
 
     def parse_double text
-      parse_text(/^([+\-0-9.]+)(,\s*)?/x, text)
+      parse_text(/^([+\-0-9.eE]+)(,\s*)?/x, text)
       @match = Float @match
     end
 
@@ -81,7 +81,7 @@ module Topcgen
     end
 
     def parse_double_array text
-      parse_text(/^\{([+\-0-9.,\s]+?)?\}(,\s*)?/x, text)
+      parse_text(/^\{([+\-0-9.eE,\s]+?)?\}(,\s*)?/x, text)
       @match = @match.split(/,\s*/).map { |s| Float s }
     end
 

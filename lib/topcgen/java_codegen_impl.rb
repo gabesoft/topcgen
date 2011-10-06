@@ -104,6 +104,9 @@ module Topcgen
     end
 
     class ValueGen
+      attr_reader :value
+      attr_reader :type
+
       def initialize(type, value)
         @value = value
         @type = type

@@ -121,6 +121,11 @@ module Topcgen
           stmt.to_s.should eq '-4234.9'
         end
 
+        it "should output a double in scientific notation" do
+          stmt = JAVA.val 'double', 1.6742947149701077E-7
+          stmt.to_s.should eq '1.6742947149701077e-07'
+        end
+
         it "should fail to output an int passed in in a single value array" do
           lambda { JAVA.val 'int', [439] }.should raise_error
         end

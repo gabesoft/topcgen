@@ -106,5 +106,11 @@ module Topcgen
       values = ValueParser.parse types, str
       values.should eq [ [ "000, 030, 030, 040, 000, 000, 000", "020, 020, 020, 010, 010, 010, 010" ], 4 ]
     end
+
+    it "should parse double in scientific notation" do
+      parser = ValueParser.new 'double'
+      parser.parse '1.6742947149701077E-7'
+      parser.match.should eq 1.6742947149701077E-7
+    end
   end
 end
