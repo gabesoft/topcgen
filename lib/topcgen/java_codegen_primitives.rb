@@ -53,6 +53,10 @@ module Topcgen
       ReturnGen.new value
     end
 
+    def self.binop(op, left, right)
+      BinaryOperationGen.new op, left, right
+    end
+
     def self.default(type)
       case type
       when 'int'

@@ -41,7 +41,8 @@ module Topcgen
         statements = args_def.zip(args).map { |a, v| var a[:type], a[:name], (val a[:type], v) }
 
         expected = return_type_is_array ? arr(return_type, t[:expected]) : val(return_type, t[:expected])
-        assert_arguments = return_type_is_double ? [ expected, actual, delta.name] : [ expected, actual ]
+        assert_error = binop '*', delta.name, expected
+        assert_arguments = return_type_is_double ? [ expected, actual, assert_error] : [ expected, actual ]
         assert_call = call assert_name, *assert_arguments
 
         statements.push assert_call

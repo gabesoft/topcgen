@@ -164,6 +164,13 @@ module Topcgen
           @stream.string.should eq "import static org.junit.Assert.*;\n"
         end
       end
+
+      describe BinaryOperationGen do
+        it "should output an addition operation" do
+          stmt = JAVA.binop '+', (JAVA.val 'double', 1.4), 'DELTA'
+          stmt.to_s.should eq "1.4 + DELTA"
+        end
+      end
     end
   end
 end

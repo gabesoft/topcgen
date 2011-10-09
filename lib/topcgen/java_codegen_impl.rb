@@ -89,6 +89,7 @@ module Topcgen
         "new #{@type}[#{@value.nil? ? @length : ''}]#{@value.nil? ? '' : ' ' + @value.to_s}"
       end
     end
+
     class NewGen
       def initialize(type)
         @type = type
@@ -153,6 +154,22 @@ module Topcgen
 
       def gen(stream, tab_count=0)
         stream.puts "#{T.tabs tab_count}#{@type} #{@name}#{@value.nil? ? '' : ' = ' + @value.to_s};"
+      end
+    end
+
+    class BinaryOperationGen
+      def initialize(op, left, right)
+        @op = op
+        @left = left
+        @right = right
+      end
+
+      def gen(stream, tab_count=0)
+        stream.puts "#{T.tabs tab_count}#{to_s}"
+      end
+
+      def to_s
+        "#{@left} #{@op} #{@right}"
       end
     end
 
