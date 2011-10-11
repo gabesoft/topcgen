@@ -81,7 +81,7 @@ module Topcgen
       end
     end
 
-    def self.qual(year, num)
+    def self.get_qual(year, num)
       case year
       when "03"
         "http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=tco03_qual_rd_#{num}"
