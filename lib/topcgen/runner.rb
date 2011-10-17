@@ -92,17 +92,24 @@ module Topcgen
   private
 
   def self.get_solution(browser, info)
-    link = info[:solution_java]
-    link = info[:solution_cpp]    if link.nil?
-    link = info[:solution_csharp] if link.nil?
-    link = info[:solution_vb]     if link.nil?
-    browser.get_solution link
-  rescue Exception => e
-    $log.error "failed to get the problem solution"
-    $log.error "solution link: #{link}"
-    $log.error e.message
-    $log.error e.backtrace.join("\n\t")
-    nil
+    links = [ info[:solution_java], info[:solution_cpp], info[:solution_csharp], info[:solution_vb] ]
+
+    solution = nil
+    index = 0
+    while (solution == nil || solution.tests == nil || solution.tests.length == 0) && (index < links.count)
+      begin
+        link = links[index]
+        index += 1
+        solution = browser.get_solution link
+      rescue Exception => e
+        $log.error "failed to get the problem solution"
+        $log.error "solution link: #{link}"
+        $log.error e.message
+        $log.error e.backtrace.join("\n\t")
+      end
+    end
+
+    solution
   end
 
   def self.get_statement(browser, link)
