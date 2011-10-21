@@ -171,6 +171,23 @@ module Topcgen
           stmt.to_s.should eq "1.4 + DELTA"
         end
       end
+
+      describe AnnotationGen do
+        it "should output simple annotation" do
+          stmt = JAVA.annotation 'Test'
+          stmt.to_s.should eq "@Test"
+        end
+
+        it "should output annotation with simple value parameters" do
+          stmt = JAVA.annotation_ex 'RunWith', false, 'var1', 'var2'
+          stmt.to_s.should eq "@RunWith(var1, var2)"
+        end
+
+        it "should output annotation with array parameters" do
+          stmt = JAVA.annotation_ex 'SuiteClasses', true, 'RandomFATest.class', 'Other.class'
+          stmt.to_s.should eq "@SuiteClasses({ RandomFATest.class, Other.class })"
+        end
+      end
     end
   end
 end

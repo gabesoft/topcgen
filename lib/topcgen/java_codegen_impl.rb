@@ -206,8 +206,10 @@ module Topcgen
     end
 
     class AnnotationGen
-      def initialize text
+      def initialize(text, is_array, values)
         @text = text
+        @is_array = is_array
+        @values = values
       end
 
       def gen(stream, tab_count=0)
@@ -215,7 +217,13 @@ module Topcgen
       end
 
       def to_s
-        "@#{@text}"
+        if @values.nil? || @values.length == 0
+          "@#{@text}"
+        else
+          args = @values.map { |v| v.to_s }.join(', ')
+          call = @is_array ? "{ #{args} }" : args
+          "@#{@text}(#{call})"
+        end
       end
     end
 
@@ -253,5 +261,5 @@ module Topcgen
       T.set_tab_size size
     end
   end
-  
+
 end

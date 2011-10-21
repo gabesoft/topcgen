@@ -62,9 +62,11 @@ module Topcgen
 
       if selected.length > 0
         selected.each do |s|
-          s[:package_root] = settings[:package_root]
-          s[:main_imports] = settings[:main_imports]
-          s[:test_imports] = settings[:test_imports]
+          s[:package_root]        = settings[:package_root]
+          s[:main_imports]        = settings[:main_imports]
+          s[:test_imports]        = settings[:test_imports]
+          s[:test_runner_path]    = settings[:test_runner_path]
+          s[:test_runner_imports] = settings[:test_runner_imports]
 
           puts "generating files for class #{s[:name]} ..."
           $log.info "generating files for class #{s[:name]}"
@@ -134,20 +136,23 @@ module Topcgen
 
     package = JAVA::Package.new(info[:name], info[:package_root], info[:categories])
 
-    write_file(package.src_file, options) do |f|
+    write_file(package.src_file, options[:force]) do |f|
       JAVA.main_class f, package, method, info
     end
-    write_file(package.test_file, options) do |f|
+    write_file(package.test_file, options[:force]) do |f|
       JAVA.test_class f, package, method, info, test_values
+    end
+    write_file(package.test_runner_file, options[:runner]) do |f|
+      JAVA.test_runner_class f, package, method, info
     end
   end
 
-  def self.write_file(file, options)
+  def self.write_file(file, force)
     dir = File.dirname file
     FileUtils.mkdir_p dir unless Dir.exists? dir
 
     exists = File.exists? file
-    if exists && !options[:force]
+    if exists && !force
       puts "skipped file #{file} (already exists)"
     else
       File.open(file, 'w') do |f|
@@ -180,6 +185,10 @@ module Topcgen
 
       opts.on '-f', '--force', 'overwrite existing files' do |force|
         options[:force] = force
+      end
+
+      opts.on '-r', '--runner', 'generate a test runner class' do |runner|
+        options[:runner] = runner
       end
 
       opts.on_tail '-h', '--help', 'display this screen' do

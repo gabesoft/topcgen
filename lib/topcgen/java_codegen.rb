@@ -12,14 +12,26 @@ module Topcgen
       gen_test_class(stream, method_def, info, tests)
     end
 
+    def self.test_runner_class(stream, package, method_def, info)
+      gen_package(stream, package.test_runner_package)
+      gen_test_runner_imports(stream, info[:test_runner_imports], package)
+      gen_test_runner_class(stream, method_def, package.test_runner_class_name, info)
+    end
+
     private
 
     def self.gen_test_imports(stream, imports, package)
-      imports = imports.clone()
+      imports = imports.nil? ? [] : imports.clone()
       imports.push({ :path => package.main_package })
       gen_imports stream, imports
     end
 
+    def self.gen_test_runner_imports(stream, imports, package)
+      imports = imports.nil? ? [] : imports.clone()
+      imports.push({ :path => package.test_package })
+      gen_imports stream, imports
+    end
+    
     def self.gen_test_class(stream, method_def, info, tests)
       delta = var 'double', 'DELTA', (val 'double', 0.000000001)
       field = var info[:name], info[:name].downcase, (ctor info[:name])
@@ -55,6 +67,16 @@ module Topcgen
       test_class_fields = return_type_is_double ? [ delta, field ] : [ field ]
       test_class = clas test_class_name, test_class_fields, methods
       test_class.gen stream
+    end
+
+    def self.gen_test_runner_class(stream, method_def, runner_class, info)
+      run_annotation = annotation_ex 'RunWith', false, 'Suite.class'
+      suite_annotation = annotation_ex 'Suite.SuiteClasses', true, "#{info[:name]}Test.class"
+      suite_class = clas runner_class, [], []
+
+      run_annotation.gen stream
+      suite_annotation.gen stream
+      suite_class.gen stream
     end
 
     def self.gen_package(stream, package_path)

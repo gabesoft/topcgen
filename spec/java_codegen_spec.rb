@@ -84,6 +84,26 @@ module Topcgen
         stream.close
       end
 
+      it "should generate the test runner class" do
+        initialize_values
+        prepare_values
+
+        @info[:test_runner_imports] = [ 
+          { :path => 'junit.framework', :object => 'Test' },
+          { :path => 'junit.framework', :object => 'TestSuite' },
+          { :path => 'org.junit.runner', :object => 'RunWith' },
+          { :path => 'org.junit.runners', :object => 'Suite' }
+        ]
+
+        stream = StringIO.new
+        file = read_file 'spec/files/AllTests.java'
+
+        JAVA.test_runner_class(stream, @package, @method, @info)
+        stream.string.should eq file
+
+        stream.close
+      end
+
       def prepare_values
         @method = MethodParser.new @stmt[:method], @stmt[:parameters], @stmt[:returns], @stmt[:signature]
         @values = @tests.map do |t|

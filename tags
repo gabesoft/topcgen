@@ -4,7 +4,9 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+AllTests	spec/files/AllTests.java	/^public class AllTests {$/;"	c
 AnnotationGen	lib/topcgen/java_codegen_impl.rb	/^    class AnnotationGen$/;"	c	class:Topcgen.JAVA
+BinaryOperationGen	lib/topcgen/java_codegen_impl.rb	/^    class BinaryOperationGen$/;"	c	class:Topcgen.JAVA
 BlankGen	lib/topcgen/java_codegen_impl.rb	/^    class BlankGen$/;"	c	class:Topcgen.JAVA
 Browser	lib/topcgen/browser.rb	/^  class Browser$/;"	c	class:Topcgen
 CRPF	lib/topcgen/editorial.rb	/^  class CRPF$/;"	c	class:Topcgen
@@ -90,9 +92,11 @@ VariableGen	lib/topcgen/java_codegen_impl.rb	/^    class VariableGen$/;"	c	class
 WEBrick	lib/topcgen/cookie_store.rb	/^class WEBrick::Cookie$/;"	c
 add_cookie	lib/topcgen/cookie_store.rb	/^    def add_cookie(cookie, hash = nil)$/;"	f	class:Topcgen.CookieStore
 annotation	lib/topcgen/java_codegen_primitives.rb	/^    def self.annotation(text)$/;"	F	class:Topcgen.JAVA
+annotation_ex	lib/topcgen/java_codegen_primitives.rb	/^    def self.annotation_ex(text, is_array, *values)$/;"	F	class:Topcgen.JAVA
 arr	lib/topcgen/java_codegen_primitives.rb	/^    def self.arr(type, value, length=0)$/;"	F	class:Topcgen.JAVA
 assert_same_length	lib/topcgen/method_parser.rb	/^    def assert_same_length(s1, s2)$/;"	f	class:Topcgen.MethodParser
 assert_same_type	lib/topcgen/method_parser.rb	/^    def assert_same_type(text, type, patt)$/;"	f	class:Topcgen.MethodParser
+binop	lib/topcgen/java_codegen_primitives.rb	/^    def self.binop(op, left, right)$/;"	F	class:Topcgen.JAVA
 call	lib/topcgen/java_codegen_primitives.rb	/^    def self.call(name, *args)$/;"	F	class:Topcgen.JAVA
 case1	spec/files/KiloManXTestAR.java	/^  public void case1() {$/;"	m	class:KiloManXTest
 case1	spec/files/KiloManXTestSV.java	/^  public void case1() {$/;"	m	class:KiloManXTest
@@ -124,6 +128,7 @@ flipMenu	spec/files/solution_fountain_of_life.html	/^            function flipMe
 flipMenu	spec/files/statement_dungeon_escape.html	/^            function flipMenu(myMenuName){$/;"	f
 flipMenu	spec/files/statement_fountain_of_life.html	/^function flipMenu(myMenuName){$/;"	f
 gen	lib/topcgen/java_codegen_impl.rb	/^      def gen(stream, tab_count=0)$/;"	f	class:Topcgen.JAVA.AnnotationGen
+gen	lib/topcgen/java_codegen_impl.rb	/^      def gen(stream, tab_count=0)$/;"	f	class:Topcgen.JAVA.BinaryOperationGen
 gen	lib/topcgen/java_codegen_impl.rb	/^      def gen(stream, tab_count=0)$/;"	f	class:Topcgen.JAVA.BlankGen
 gen	lib/topcgen/java_codegen_impl.rb	/^      def gen(stream, tab_count=0)$/;"	f	class:Topcgen.JAVA.ClassGen
 gen	lib/topcgen/java_codegen_impl.rb	/^      def gen(stream, tab_count=0)$/;"	f	class:Topcgen.JAVA.CommentGen
@@ -143,6 +148,8 @@ gen_main_imports	lib/topcgen/java_codegen.rb	/^    def self.gen_main_imports(str
 gen_package	lib/topcgen/java_codegen.rb	/^    def self.gen_package(stream, package_path)$/;"	F	class:Topcgen.JAVA
 gen_test_class	lib/topcgen/java_codegen.rb	/^    def self.gen_test_class(stream, method_def, info, tests)$/;"	F	class:Topcgen.JAVA
 gen_test_imports	lib/topcgen/java_codegen.rb	/^    def self.gen_test_imports(stream, imports, package)$/;"	F	class:Topcgen.JAVA
+gen_test_runner_class	lib/topcgen/java_codegen.rb	/^    def self.gen_test_runner_class(stream, method_def, info)$/;"	F	class:Topcgen.JAVA
+gen_test_suite_imports	lib/topcgen/java_codegen.rb	/^    def self.gen_test_suite_imports(stream, imports, package)$/;"	F	class:Topcgen.JAVA
 generate_java_files	lib/topcgen/runner.rb	/^  def self.generate_java_files(problem, options)$/;"	F	class:Topcgen
 get	lib/topcgen/editorial.rb	/^    def self.get num$/;"	F	class:Topcgen.SRM
 get	lib/topcgen/editorial.rb	/^    def self.get(year, type, num)$/;"	F	class:Topcgen.TCCC
@@ -185,12 +192,13 @@ initialize	lib/topcgen/exceptions.rb	/^    def initialize(message, cause=$!)$/;"
 initialize	lib/topcgen/exceptions.rb	/^    def initialize(type, str)$/;"	f	class:Topcgen.ValueParseException
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize path$/;"	f	class:Topcgen.JAVA.PackageGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize statements$/;"	f	class:Topcgen.JAVA.MultipleGen
-initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize text$/;"	f	class:Topcgen.JAVA.AnnotationGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize text$/;"	f	class:Topcgen.JAVA.CommentGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(name, args)$/;"	f	class:Topcgen.JAVA.FunCallGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(name, fields, methods, comments, visibility)$/;"	f	class:Topcgen.JAVA.ClassGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(name, return_type, parameters, statements, annotation, comment, visibility)$/;"	f	class:Topcgen.JAVA.MethodGen
+initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(op, left, right)$/;"	f	class:Topcgen.JAVA.BinaryOperationGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(path, object, static)$/;"	f	class:Topcgen.JAVA.ImportGen
+initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(text, is_array, values)$/;"	f	class:Topcgen.JAVA.AnnotationGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(type)$/;"	f	class:Topcgen.JAVA.NewGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(type, name, value=nil)$/;"	f	class:Topcgen.JAVA.VariableGen
 initialize	lib/topcgen/java_codegen_impl.rb	/^      def initialize(type, value)$/;"	f	class:Topcgen.JAVA.ValueGen
@@ -261,8 +269,10 @@ submitEnter	spec/files/search.html	/^  function submitEnter(e) {$/;"	f
 sym_keys	lib/topcgen/settings.rb	/^    def self.sym_keys(hash) $/;"	F	class:Topcgen.Settings
 tabs	lib/topcgen/java_codegen_impl.rb	/^      def self.tabs tab_count$/;"	F	class:Topcgen.JAVA.T
 test_class	lib/topcgen/java_codegen.rb	/^    def self.test_class(stream, package, method_def, info, tests)$/;"	F	class:Topcgen.JAVA
+test_suite_class	lib/topcgen/java_codegen.rb	/^    def self.test_suite_class(stream, package, method_def, info)$/;"	F	class:Topcgen.JAVA
 to_s	lib/topcgen/cookie_store.rb	/^    def to_s$/;"	f	class:Topcgen.CookieStore
 to_s	lib/topcgen/java_codegen_impl.rb	/^      def to_s$/;"	f	class:Topcgen.JAVA.AnnotationGen
+to_s	lib/topcgen/java_codegen_impl.rb	/^      def to_s$/;"	f	class:Topcgen.JAVA.BinaryOperationGen
 to_s	lib/topcgen/java_codegen_impl.rb	/^      def to_s$/;"	f	class:Topcgen.JAVA.FunCallGen
 to_s	lib/topcgen/java_codegen_impl.rb	/^      def to_s$/;"	f	class:Topcgen.JAVA.NewArrayGen
 to_s	lib/topcgen/java_codegen_impl.rb	/^      def to_s$/;"	f	class:Topcgen.JAVA.NewGen
@@ -277,6 +287,7 @@ toggleMenu	spec/files/solution_fountain_of_life.html	/^            function togg
 toggleMenu	spec/files/statement_dungeon_escape.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f
 toggleMenu	spec/files/statement_fountain_of_life.html	/^            function toggleMenu(menuTitle,menuID){$/;"	f
 topc.dynamic	spec/files/KiloManX.java	/^package topc.dynamic;$/;"	p
+topc.test	spec/files/AllTests.java	/^package topc.test;$/;"	p
 topc.test.dynamic	spec/files/KiloManXTestAR.java	/^package topc.test.dynamic;$/;"	p
 topc.test.dynamic	spec/files/KiloManXTestSV.java	/^package topc.test.dynamic;$/;"	p
 update_cookies	lib/topcgen/browser.rb	/^    def update_cookies response$/;"	f	class:Topcgen.Browser

@@ -71,7 +71,11 @@ module Topcgen
     end
 
     def self.annotation(text)
-      AnnotationGen.new text
+      AnnotationGen.new text, false, []
+    end
+
+    def self.annotation_ex(text, is_array, *values)
+      AnnotationGen.new text, is_array, values
     end
 
     def self.method(name, return_type, parameters, statements, annotation=nil, comment=nil, visibility='public')
