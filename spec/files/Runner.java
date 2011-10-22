@@ -8,5 +8,5 @@ import topc.test.dynamic.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ KiloManXTest.class })
-public class AllTests {
+public class Runner {
 }

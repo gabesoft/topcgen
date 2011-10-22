@@ -96,7 +96,7 @@ module Topcgen
         ]
 
         stream = StringIO.new
-        file = read_file 'spec/files/AllTests.java'
+        file = read_file 'spec/files/Runner.java'
 
         JAVA.test_runner_class(stream, @package, @method, @info)
         stream.string.should eq file

@@ -187,7 +187,7 @@ module Topcgen
         options[:force] = force
       end
 
-      opts.on '-r', '--runner', 'generate a test runner class' do |runner|
+      opts.on '-r', '--runner', 'also generate a test runner class' do |runner|
         options[:runner] = runner
       end
 

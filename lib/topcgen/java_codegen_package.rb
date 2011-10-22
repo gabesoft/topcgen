@@ -17,21 +17,21 @@ module Topcgen
         @categories = categories
         @all_categories = get_all_categories
 
-        @main_class_name        = class_name
-        @test_class_name        = "#{class_name}Test"
-        @test_runner_class_name  = "AllTests"
+        @main_class_name         = class_name
+        @test_class_name         = "#{class_name}Test"
+        @test_runner_class_name  = "Runner"
 
         @rel_package  = get_rel_package
 
         @src_folder   = "src/#{@rel_package}"
         @test_folder  = "test"
 
-        @src_file         = "#{@src_folder}/#{@main_class_name}.java"
-        @test_file        = "#{@test_folder}/#{@rel_package}/#{@test_class_name}.java"
+        @src_file          = "#{@src_folder}/#{@main_class_name}.java"
+        @test_file         = "#{@test_folder}/#{@rel_package}/#{@test_class_name}.java"
         @test_runner_file  = "#{@test_folder}/#{@test_runner_class_name}.java"
 
-        @main_package         = "#{package_root}.#{@rel_package}"
-        @test_package         = "#{package_root}.test.#{@rel_package}"
+        @main_package          = "#{package_root}.#{@rel_package}"
+        @test_package          = "#{package_root}.test.#{@rel_package}"
         @test_runner_package   = "#{package_root}.test"
       end
 

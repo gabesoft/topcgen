@@ -9,12 +9,12 @@ module Topcgen
         package.test_package.should eq 'top.coder.test.dynamic'
         package.main_class_name.should eq 'KiloManX'
         package.test_class_name.should eq 'KiloManXTest'
-        package.test_runner_class_name.should eq 'AllTests'
+        package.test_runner_class_name.should eq 'Runner'
         package.src_folder.should eq 'src/dynamic'
         package.src_file.should eq 'src/dynamic/KiloManX.java'
         package.test_folder.should eq 'test'
         package.test_file.should eq 'test/dynamic/KiloManXTest.java'
-        package.test_runner_file.should eq 'test/AllTests.java'
+        package.test_runner_file.should eq 'test/Runner.java'
       end
     end
   end
