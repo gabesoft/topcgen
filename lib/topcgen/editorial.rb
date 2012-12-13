@@ -45,7 +45,7 @@ module Topcgen
 
   class TCO
     def self.get_link(used_in)
-      pat = /^TCO(\s+\d\d|\s+')?(\d\d)\s+(final|semi|round|qual|wild|champ|sponsor)(?:.*?\s+(\d+[A-Z]?))?/i
+      pat = /^TCO(\s+\d\d|\s+')?(\d\d)\s+(final|semi|round|qual|wild|champ|sponsor|parallel)(?:.*?\s+(\d+[A-Z]?))?/i
       match = pat.match used_in
       year = match[2]
       type = match[3].downcase
