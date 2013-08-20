@@ -246,7 +246,7 @@ module Topcgen
     end
 
     class T
-      @@TAB_SIZE = 2
+      @@TAB_SIZE = 4
 
       def self.tabs tab_count
         ' ' * @@TAB_SIZE * tab_count

@@ -22,8 +22,10 @@ module Topcgen
     options = parse_options
     settings = Settings.read_file '.topcgen.yml'
     settings[:credentials] = {} if settings[:credentials].nil?
+    settings[:tab_size] = 4 if settings[:tab_size].nil?
     settings[:credentials][:user] = options[:user] unless options[:user].nil?
     settings[:credentials][:pass] = options[:pass] unless options[:pass].nil?
+    options[:tab_size] = settings[:tab_size]
     browser = Browser.new
 
     begin
@@ -135,6 +137,8 @@ module Topcgen
     end
 
     package = JAVA::Package.new(info[:name], info[:package_root], info[:categories])
+
+    JAVA.set_tab_size(options[:tab_size])
 
     write_file(package.src_file, options[:force]) do |f|
       JAVA.main_class f, package, method, info
