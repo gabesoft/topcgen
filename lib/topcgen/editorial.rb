@@ -125,6 +125,8 @@ module Topcgen
         "http://apps.topcoder.com/wiki/display/tc/TCO%2709+Elimination+Round+#{num}"
       when "10", "11"
         "http://apps.topcoder.com/wiki/display/tc/TCO'#{year}+Online+Round+#{num}"
+      else 
+        "http://apps.topcoder.com/wiki/display/tc/TCO+20#{year}+Round+#{num}"
       end
     end
 
