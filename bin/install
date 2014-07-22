@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p `dirname $0`/../pkg
 rm -f `dirname $0`/../pkg/topcgen*.gem
 gem build `dirname $0`/../topcgen.gemspec
 mv topcgen*.gem `dirname $0`/../pkg/
