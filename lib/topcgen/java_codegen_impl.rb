@@ -125,6 +125,8 @@ module Topcgen
           "#{@value}L"
         when 'double'
           @value.to_s
+        when 'char'
+          "'#{@value}'"
         when 'String'
           "\"#{@value}\""
         when 'int[]'

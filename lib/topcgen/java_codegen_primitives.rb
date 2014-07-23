@@ -65,7 +65,9 @@ module Topcgen
         ValueGen.new 'long', 0
       when 'double'
         ValueGen.new 'double', 0.0
-      else  
+      when 'char'
+        ValueGen.new 'char', '\u0000'
+      else
         'null'
       end
     end

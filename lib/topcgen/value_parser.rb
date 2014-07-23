@@ -11,6 +11,8 @@ module Topcgen
       case @type
       when 'String'
         parse_string text
+      when 'char'
+        parse_char text
       when 'int'
         parse_int text
       when 'long'
@@ -48,6 +50,10 @@ module Topcgen
 
     def parse_string text
       parse_text(/^"([^"]+?)?"(,\s*)?/x, text)
+    end
+
+    def parse_char text
+      parse_text(/^'?([^'])'?(,\s*)?/x, text)
     end
 
     def parse_int text
