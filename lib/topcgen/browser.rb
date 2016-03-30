@@ -98,26 +98,26 @@ module Topcgen
       params[:cat] = nil                  # category
       params[:div1l] = nil                # division I level
       params[:div2l] = nil                # division II level
-      params[:maxd1s] = nil	              # maximum division I success rate 	%
-      params[:maxd2s] = nil               #	maximum division II success rate 	%
-      params[:mind1s] = nil	              # minimum division I success rate 	%
-      params[:mind2s] = nil	              # minimum division II success rate 	%
-      params[:er] = nil	
+      params[:maxd1s] = nil               # maximum division I success rate   %
+      params[:maxd2s] = nil               #	maximum division II success rate  %
+      params[:mind1s] = nil               # minimum division I success rate   %
+      params[:mind2s] = nil               # minimum division II success rate  %
+      params[:er] = nil
       params[:sc] = nil
       params[:sd] = nil
       params[:sr] = nil
       params[:wr] = nil                   # writer
-      params 
+      params
     end
 
     def http_get url
       $log.info "HTTP GET: #{url}" unless $log.nil?
       response = HTTP.get(url, @cookies)
       update_cookies response
-      response 
+      response
     end
 
-    def http_post(url, params)      
+    def http_post(url, params)
       $log.info "HTTP POST: #{url}" unless $log.nil?
       response = HTTP.post(url, @cookies, params)
       update_cookies response
@@ -132,7 +132,7 @@ module Topcgen
     end
 
     def get_url(relative_path, query_hash={})
-      base = "http://community.topcoder.com#{relative_path}"
+      base = "https://community.topcoder.com#{relative_path}"
 
       query = query_hash.map do |key, value|
         param = value.nil? ? '' : value

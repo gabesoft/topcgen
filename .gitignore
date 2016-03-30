@@ -10,3 +10,5 @@ pkg/*
 tmp/*
 cookies/*
 topc_test/*
+.#*
+.DS_Store
