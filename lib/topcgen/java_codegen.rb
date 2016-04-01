@@ -31,7 +31,7 @@ module Topcgen
       imports.push({ :path => package.test_package })
       gen_imports stream, imports
     end
-    
+
     def self.gen_test_class(stream, method_def, info, tests)
       delta = var 'double', 'DELTA', (val 'double', 0.000000001)
       field = var info[:name], info[:name].downcase, (ctor info[:name])
@@ -115,9 +115,11 @@ module Topcgen
 
     def self.get_debug_method
       argument = 'os'
+      unusedAttr = val 'String', 'unused'
+      unusedAnnotation = annotation_ex 'SuppressWarnings', false, unusedAttr
       statement = call 'System.out.println', (call 'Arrays.deepToString', argument)
       parameter = { :type => 'Object...', :name => argument }
-      method 'debug', 'void', [ parameter ], [ statement ], nil, nil, 'private'
+      method 'debug', 'void', [ parameter ], [ statement ], unusedAnnotation, nil, 'private'
     end
 
   end

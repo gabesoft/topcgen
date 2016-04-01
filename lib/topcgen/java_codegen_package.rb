@@ -23,7 +23,7 @@ module Topcgen
 
         @rel_package  = get_rel_package
 
-        @src_folder   = "src/#{@rel_package}"
+        @src_folder   = "src/topc/#{@rel_package}"
         @test_folder  = "test"
 
         @src_file          = "#{@src_folder}/#{@main_class_name}.java"

@@ -43,9 +43,9 @@ module Topcgen
 
       if results.length == 0
         puts 'no problems were found that match your search criteria'
-      elsif results.length > 1 
+      elsif results.length > 1
         puts "found #{results.length} results"
-        results.each_with_index do |v, i| 
+        results.each_with_index do |v, i|
           puts "#{i + 1}: #{v[:name]} #{v[:used_in]} #{v[:point_value]}"
         end
 
@@ -83,7 +83,7 @@ module Topcgen
           rescue Exception => e
             $log.error e.message
             $log.error e.backtrace.join("\n\t")
-            puts "failed to generate files see #{$log_file} for details" 
+            puts "failed to generate files see #{$log_file} for details"
           end
         end
       end
@@ -125,9 +125,9 @@ module Topcgen
     statement = problem[:statement]
     tests = problem[:solution].nil? ? statement.tests : problem[:solution].tests
 
-    method = MethodParser.new(statement[:method], 
-                              statement[:parameters], 
-                              statement[:returns], 
+    method = MethodParser.new(statement[:method],
+                              statement[:parameters],
+                              statement[:returns],
                               statement[:signature])
     test_values = tests.map do |t|
       arg_types = method.parameters.map { |a| a[:type] }
