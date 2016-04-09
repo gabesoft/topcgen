@@ -29,7 +29,7 @@ module Topcgen
     private
 
     def self.get num
-      if num < "103" 
+      if num < "103"
         "http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=srm#{num}_room1"
       elsif num == "103"
         "http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=srm103_rookie"
@@ -59,13 +59,13 @@ module Topcgen
       case type
       when 'final'
         get_final year
-      when 'semi' 
+      when 'semi'
         get_semi year, num
       when 'round'
         get_round year, num
-      when 'qual' 
+      when 'qual'
         get_qual year, num
-      when 'wild' 
+      when 'wild'
         get_wild year
       when 'champ'
         get_champ year
@@ -125,7 +125,7 @@ module Topcgen
         "http://apps.topcoder.com/wiki/display/tc/TCO%2709+Elimination+Round+#{num}"
       when "10", "11"
         "http://apps.topcoder.com/wiki/display/tc/TCO'#{year}+Online+Round+#{num}"
-      else 
+      else
         "http://apps.topcoder.com/wiki/display/tc/TCO+20#{year}+Round+#{num}"
       end
     end
@@ -160,7 +160,8 @@ module Topcgen
 
   class TCCC
     def self.get_link(used_in)
-      pat = /^TCCC(\s+\d\d|\s+')?(\d\d)\s+(final|semi|round|qual|wild|int'l|ne\/se|w\/mv)(?:.*?\s+(\d+[A-Z]?))?/i
+      pat = /^TCCC(\s+\d\d|\s+')?(\d\d)\s+(final|semi|round|sponsor|qual|wild|int'l|ne\/se|w\/mv)(?:.*?\s+(\d+[A-Z]?))?/i
+      # puts used_in
       match = pat.match used_in
       year = match[2]
       type = match[3].downcase
@@ -168,20 +169,22 @@ module Topcgen
       get year, type, num
     end
 
-    private 
+    private
 
     def self.get(year, type, num)
       #puts "year: #{year}, type: #{type}, num: #{num}, #{num.nil?}"
       case type
       when 'final'
         get_final year
-      when 'semi' 
+      when 'semi'
         get_semi year, num
       when 'round'
         get_round year, num
-      when 'qual' 
+      when 'sponsor'
+        get_round year, num
+      when 'qual'
         get_qual year, num
-      when 'wild' 
+      when 'wild'
         get_wild year
       when "int'l", "ne/se", "w/mw"
         get_regional type
@@ -242,7 +245,7 @@ module Topcgen
       when "04", "05", "06"
         "http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=tccc#{year}_qual_#{num}"
       when "07"
-        "http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=tccc#{year}_qual_rd#{num}"       
+        "http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=tccc#{year}_qual_rd#{num}"
       end
     end
 
@@ -268,13 +271,13 @@ module Topcgen
       get year, type, num
     end
 
-    private 
+    private
 
     def self.get(year, type, num)
       case type
       when 'final'
         "http://www.topcoder.com/tc?module=Static&d1=tournaments&d2=tci#{year}&d3=champprob"
-      when 'semi' 
+      when 'semi'
         "http://www.topcoder.com/tc?module=Static&d1=tournaments&d2=tci#{year}&d3=semiprob#{num}"
       when 'round'
         "http://www.topcoder.com/tc?module=Static&d1=match_editorials&d2=invit#{year}_r#{num}"
@@ -295,5 +298,3 @@ module Topcgen
     end
   end
 end
-
-
